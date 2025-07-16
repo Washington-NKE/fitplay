@@ -1,0 +1,256 @@
+{% extends "base.html" %}
+
+{% block title %}Diet Plan - FitPlay{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">
+                <i class="fas fa-utensils me-2"></i>Your Personalized Diet Plan
+            </h2>
+        </div>
+    </div>
+
+    <!-- Diet Plan Overview -->
+    {% if diet_plan %}
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-apple-alt me-2"></i>Daily Meal Plan
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Fitness Goal:</strong> {{ diet_plan.goal }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Daily Calories:</strong> {{ diet_plan.daily_calories }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Meals -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="meal-card">
+                                <div class="meal-header">
+                                    <i class="fas fa-sun text-warning me-2"></i>
+                                    <strong>Breakfast</strong>
+                                    <span class="badge bg-warning ms-2">{{ diet_plan.meals.breakfast.calories }} cal</span>
+                                </div>
+                                <div class="meal-content">
+                                    <p class="meal-suggestion">{{ diet_plan.meals.breakfast.selected }}</p>
+                                    <details>
+                                        <summary>More options</summary>
+                                        <ul class="mt-2">
+                                            {% for option in diet_plan.meals.breakfast.options %}
+                                            <li>{{ option }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </details>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="meal-card">
+                                <div class="meal-header">
+                                    <i class="fas fa-cloud-sun text-info me-2"></i>
+                                    <strong>Lunch</strong>
+                                    <span class="badge bg-info ms-2">{{ diet_plan.meals.lunch.calories }} cal</span>
+                                </div>
+                                <div class="meal-content">
+                                    <p class="meal-suggestion">{{ diet_plan.meals.lunch.selected }}</p>
+                                    <details>
+                                        <summary>More options</summary>
+                                        <ul class="mt-2">
+                                            {% for option in diet_plan.meals.lunch.options %}
+                                            <li>{{ option }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </details>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="meal-card">
+                                <div class="meal-header">
+                                    <i class="fas fa-moon text-primary me-2"></i>
+                                    <strong>Dinner</strong>
+                                    <span class="badge bg-primary ms-2">{{ diet_plan.meals.dinner.calories }} cal</span>
+                                </div>
+                                <div class="meal-content">
+                                    <p class="meal-suggestion">{{ diet_plan.meals.dinner.selected }}</p>
+                                    <details>
+                                        <summary>More options</summary>
+                                        <ul class="mt-2">
+                                            {% for option in diet_plan.meals.dinner.options %}
+                                            <li>{{ option }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </details>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <div class="meal-card">
+                                <div class="meal-header">
+                                    <i class="fas fa-cookie-bite text-success me-2"></i>
+                                    <strong>Snacks</strong>
+                                    <span class="badge bg-success ms-2">{{ diet_plan.meals.snacks.calories }} cal</span>
+                                </div>
+                                <div class="meal-content">
+                                    <p class="meal-suggestion">{{ diet_plan.meals.snacks.selected }}</p>
+                                    <details>
+                                        <summary>More options</summary>
+                                        <ul class="mt-2">
+                                            {% for option in diet_plan.meals.snacks.options %}
+                                            <li>{{ option }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </details>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <!-- Nutrition Tips -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-lightbulb me-2"></i>Nutrition Tips
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        {% for tip in diet_plan.tips %}
+                        <li class="mb-2">
+                            <i class="fas fa-check text-success me-2"></i>{{ tip }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Hydration -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-tint me-2"></i>Hydration
+                    </h5>
+                </div>
+                <div class="card-body text-center">
+                    <i class="fas fa-glass-water fa-3x text-info mb-3"></i>
+                    <h4>{{ diet_plan.water_intake }}L</h4>
+                    <p class="text-muted">Daily water intake</p>
+                </div>
+            </div>
+            
+            <!-- Meal Timing -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-clock me-2"></i>Meal Timing
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Breakfast:</span>
+                        <span class="text-muted">{{ diet_plan.meal_timing.breakfast }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Lunch:</span>
+                        <span class="text-muted">{{ diet_plan.meal_timing.lunch }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Dinner:</span>
+                        <span class="text-muted">{{ diet_plan.meal_timing.dinner }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span>Snacks:</span>
+                        <span class="text-muted">{{ diet_plan.meal_timing.snacks }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Update Goals Form -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user-cog me-2"></i>Update Your Goals
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('diet.update_goals') }}">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="age" class="form-label">Age</label>
+                                <input type="number" class="form-control" id="age" name="age" 
+                                       value="{{ session.get('age', 18) }}" min="13" max="100" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="weight" class="form-label">Weight (kg)</label>
+                                <input type="number" class="form-control" id="weight" name="weight" 
+                                       value="{{ session.get('weight', 70) }}" min="30" max="200" step="0.1" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="fitness_goal" class="form-label">Fitness Goal</label>
+                                <select class="form-select" id="fitness_goal" name="fitness_goal" required>
+                                    <option value="weight_loss" {% if session.get('fitness_goal') == 'weight_loss' %}selected{% endif %}>
+                                        Weight Loss
+                                    </option>
+                                    <option value="muscle_gain" {% if session.get('fitness_goal') == 'muscle_gain' %}selected{% endif %}>
+                                        Muscle Gain
+                                    </option>
+                                    <option value="maintenance" {% if session.get('fitness_goal') == 'maintenance' %}selected{% endif %}>
+                                        Maintenance
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-sync me-1"></i>Update Diet Plan
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary ms-2" onclick="generateNewPlan()">
+                                    <i class="fas fa-random me-1"></i>Generate New Plan
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function generateNewPlan() {
+    fetch('/diet/generate_plan')
+        .then(response => response.json())
+        .then(data => {
+            location.reload();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+</script>
+{% endblock %}

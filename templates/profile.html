@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - FitPlay{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">
+                <i class="fas fa-user me-2"></i>Your Profile
+            </h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Profile Information -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user-cog me-2"></i>Profile Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" 
+                                       value="{{ current_user.username }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="age" class="form-label">Age</label>
+                                <input type="number" class="form-control" id="age" name="age" 
+                                       value="{{ session.get('age', 18) }}" min="13" max="100" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="weight" class="form-label">Weight (kg)</label>
+                                <input type="number" class="form-control" id="weight" name="weight" 
+                                       value="{{ session.get('weight', 70) }}" min="30" max="200" step="0.1" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="fitness_goal" class="form-label">Fitness Goal</label>
+                                <select class="form-select" id="fitness_goal" name="fitness_goal" required>
+                                    <option value="weight_loss" {% if session.get('fitness_goal') == 'weight_loss' %}selected{% endif %}>
+                                        Weight Loss
+                                    </option>
+                                    <option value="muscle_gain" {% if session.get('fitness_goal') == 'muscle_gain' %}selected{% endif %}>
+                                        Muscle Gain
+                                    </option>
+                                    <option value="maintenance" {% if session.get('fitness_goal') == 'maintenance' %}selected{% endif %}>
+                                        Maintenance
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i>Update Profile
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Stats -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-bar me-2"></i>Your Stats
+                    </h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="stat-item mb-3">
+                        <i class="fas fa-star fa-2x text-warning mb-2"></i>
+                        <h4>{{ current_user.points }}</h4>
+                        <p class="text-muted">Total Points</p>
+                    </div>
+                    <div class="stat-item mb-3">
+                        <i class="fas fa-dumbbell fa-2x text-success mb-2"></i>
+                        <h4>{{ current_user.workouts_completed }}</h4>
+                        <p class="text-muted">Workouts Completed</p>
+                    </div>
+                    <div class="stat-item mb-3">
+                        <i class="fas fa-fire fa-2x text-danger mb-2"></i>
+                        <h4>{{ current_user.calories_burned }}</h4>
+                        <p class="text-muted">Calories Burned</p>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-clock fa-2x text-info mb-2"></i>
+                        <h4>{{ "%.1f"|format(current_user.time_active) }}min</h4>
+                        <p class="text-muted">Time Active</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Badges Section -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-medal me-2"></i>Your Badges
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if current_user.badges %}
+                    <div class="row">
+                        {% for badge in current_user.badges %}
+                        <div class="col-md-3 mb-3">
+                            <div class="badge-card text-center">
+                                <div class="badge-icon">
+                                    <i class="fas fa-trophy fa-3x text-warning"></i>
+                                </div>
+                                <h6 class="mt-2">{{ badge.replace('_', ' ').title() }}</h6>
+                                <small class="text-muted">Earned this badge!</small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-medal fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">No badges earned yet. Start playing games to earn your first badge!</p>
+                        <a href="{{ url_for('games.games') }}" class="btn btn-primary">
+                            <i class="fas fa-play me-1"></i>Play Games
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Daily Usage -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-clock me-2"></i>Daily Usage
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <p class="mb-2">Today's Usage: <strong>{{ current_user.daily_usage }} minutes</strong></p>
+                            <div class="progress mb-3">
+                                <div class="progress-bar" role="progressbar" 
+                                     style="width: {{ (current_user.daily_usage / 120) * 100 }}%"
+                                     aria-valuenow="{{ current_user.daily_usage }}" 
+                                     aria-valuemin="0" 
+                                     aria-valuemax="120">
+                                </div>
+                            </div>
+                            <small class="text-muted">Daily limit: 120 minutes (2 hours)</small>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            {% if current_user.daily_usage < 120 %}
+                            <div class="usage-status text-success">
+                                <i class="fas fa-check-circle fa-2x mb-2"></i>
+                                <p>Good to go!</p>
+                            </div>
+                            {% else %}
+                            <div class="usage-status text-warning">
+                                <i class="fas fa-exclamation-triangle fa-2x mb-2"></i>
+                                <p>Daily limit reached</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

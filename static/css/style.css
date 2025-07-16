@@ -1,0 +1,425 @@
+/* FitPlay Custom Styles */
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --fitness-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --game-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    padding-top: 76px; /* Account for fixed navbar */
+}
+
+.main-content {
+    min-height: calc(100vh - 200px);
+    padding-bottom: 2rem;
+}
+
+/* Navigation */
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ffffff !important;
+}
+
+/* Cards */
+.card {
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.stats-card {
+    border-left: 4px solid var(--primary-color);
+}
+
+.stats-card .card-body {
+    padding: 1.5rem;
+}
+
+.feature-card {
+    border-top: 4px solid var(--primary-color);
+}
+
+.feature-card:nth-child(2) {
+    border-top-color: var(--success-color);
+}
+
+.feature-card:nth-child(3) {
+    border-top-color: var(--info-color);
+}
+
+/* Game Cards */
+.game-card {
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.game-card:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-5px);
+    box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.15);
+}
+
+.game-card[data-game="squat_tap"]:hover {
+    border-color: var(--primary-color);
+}
+
+.game-card[data-game="jump_counter"]:hover {
+    border-color: var(--success-color);
+}
+
+.game-card[data-game="plank_timer"]:hover {
+    border-color: var(--info-color);
+}
+
+.game-card[data-game="burpee_challenge"]:hover {
+    border-color: var(--warning-color);
+}
+
+/* Game Interface */
+.game-action-area {
+    padding: 2rem;
+    background: var(--light-color);
+    border-radius: 10px;
+    margin: 2rem 0;
+}
+
+.game-action-btn {
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    min-width: 200px;
+}
+
+.game-action-btn:hover {
+    transform: scale(1.05);
+}
+
+.game-action-btn:active {
+    transform: scale(0.95);
+}
+
+/* Statistics Display */
+.stat-display {
+    padding: 1rem;
+    text-align: center;
+}
+
+.stat-item {
+    padding: 1rem;
+    border-radius: 10px;
+    background: var(--light-color);
+    transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+    background: #e9ecef;
+}
+
+/* Progress Bars */
+.progress {
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    transition: width 0.6s ease;
+}
+
+/* Badges */
+.badge-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0.5rem;
+}
+
+.badge-card {
+    background: var(--light-color);
+    border-radius: 10px;
+    padding: 1rem;
+    transition: all 0.3s ease;
+}
+
+.badge-card:hover {
+    background: #e9ecef;
+    transform: translateY(-2px);
+}
+
+.badge-icon {
+    padding: 1rem;
+    background: var(--warning-color);
+    border-radius: 50%;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+}
+
+/* Meal Cards */
+.meal-card {
+    background: var(--light-color);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.meal-card:hover {
+    background: #e9ecef;
+}
+
+.meal-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.meal-content {
+    margin-left: 1.5rem;
+}
+
+.meal-suggestion {
+    font-weight: 500;
+    color: var(--dark-color);
+    margin-bottom: 0.5rem;
+}
+
+/* Challenge Cards */
+.challenge-card {
+    background: var(--light-color);
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.challenge-card:hover {
+    background: #e9ecef;
+    transform: translateY(-2px);
+}
+
+.challenge-header {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.challenge-content {
+    margin-top: 0.5rem;
+}
+
+/* Achievement Items */
+.achievement-item {
+    padding: 1rem;
+    background: var(--light-color);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+/* Leaderboard */
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+.table-primary {
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+/* Usage Status */
+.usage-status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+/* Animations */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.game-action-btn.active {
+    animation: pulse 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .game-action-btn {
+        width: 100%;
+        padding: 1.5rem;
+    }
+    
+    .stat-display {
+        margin-bottom: 1rem;
+    }
+    
+    .meal-card {
+        margin-bottom: 1rem;
+    }
+    
+    .challenge-card {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Footer */
+.footer {
+    background: var(--light-color);
+    border-top: 1px solid #dee2e6;
+    margin-top: 2rem;
+}
+
+/* Alert Customizations */
+.alert {
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+/* Button Customizations */
+.btn {
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* Form Customizations */
+.form-control, .form-select {
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Modal Customizations */
+.modal-content {
+    border: none;
+    border-radius: 10px;
+}
+
+.modal-header {
+    border-bottom: 1px solid #dee2e6;
+    border-radius: 10px 10px 0 0;
+}
+
+.modal-footer {
+    border-top: 1px solid #dee2e6;
+    border-radius: 0 0 10px 10px;
+}
+
+/* Loading States */
+.btn.loading {
+    position: relative;
+    color: transparent;
+}
+
+.btn.loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Print Styles */
+@media print {
+    .navbar, .footer, .btn, .game-action-area {
+        display: none !important;
+    }
+    
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+    }
+}

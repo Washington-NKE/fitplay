@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Hero Section -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-4 fw-bold text-primary mb-4">
+                Welcome to FitPlay!
+            </h1>
+            <p class="lead mb-4">
+                The gamified fitness platform that makes staying healthy fun and rewarding. 
+                Track your progress, play fitness games, and earn points and badges!
+            </p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                <a href="{{ url_for('games.games') }}" class="btn btn-primary btn-lg me-md-2">
+                    <i class="fas fa-play me-2"></i>Start Playing
+                </a>
+                <a href="{{ url_for('dashboard.dashboard') }}" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-chart-line me-2"></i>View Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="row mb-5">
+        <div class="col-md-3 mb-3">
+            <div class="card text-center stats-card">
+                <div class="card-body">
+                    <i class="fas fa-star fa-2x text-warning mb-2"></i>
+                    <h3 class="card-title">{{ current_user.points }}</h3>
+                    <p class="card-text">Points Earned</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-center stats-card">
+                <div class="card-body">
+                    <i class="fas fa-dumbbell fa-2x text-success mb-2"></i>
+                    <h3 class="card-title">{{ current_user.workouts_completed }}</h3>
+                    <p class="card-text">Workouts Done</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-center stats-card">
+                <div class="card-body">
+                    <i class="fas fa-fire fa-2x text-danger mb-2"></i>
+                    <h3 class="card-title">{{ current_user.calories_burned }}</h3>
+                    <p class="card-text">Calories Burned</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card text-center stats-card">
+                <div class="card-body">
+                    <i class="fas fa-medal fa-2x text-info mb-2"></i>
+                    <h3 class="card-title">{{ current_user.badges|length }}</h3>
+                    <p class="card-text">Badges Earned</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feature Cards -->
+    <div class="row mb-5">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 feature-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-gamepad fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Fitness Games</h5>
+                    <p class="card-text">
+                        Play interactive mini-games that make exercise fun. 
+                        Earn points for squats, jumps, planks, and more!
+                    </p>
+                    <a href="{{ url_for('games.games') }}" class="btn btn-primary">
+                        <i class="fas fa-play me-1"></i>Play Now
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 feature-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Progress Tracking</h5>
+                    <p class="card-text">
+                        Monitor your fitness journey with detailed analytics. 
+                        Track calories, workout time, and achievements.
+                    </p>
+                    <a href="{{ url_for('dashboard.dashboard') }}" class="btn btn-success">
+                        <i class="fas fa-chart-bar me-1"></i>View Stats
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 feature-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-utensils fa-3x text-info mb-3"></i>
+                    <h5 class="card-title">Diet Plans</h5>
+                    <p class="card-text">
+                        Get personalized nutrition recommendations based on 
+                        your age, weight, and fitness goals.
+                    </p>
+                    <a href="{{ url_for('diet.diet') }}" class="btn btn-info">
+                        <i class="fas fa-apple-alt me-1"></i>Get Plan
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Badges -->
+    {% if current_user.badges %}
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3 class="text-center mb-4">Your Badges</h3>
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                {% for badge in current_user.badges %}
+                <div class="badge-display">
+                    <div class="badge bg-warning text-dark p-3 rounded-circle">
+                        <i class="fas fa-trophy fa-2x"></i>
+                    </div>
+                    <small class="d-block text-center mt-2">{{ badge.replace('_', ' ').title() }}</small>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Daily Usage Limit -->
+    <div class="row">
+        <div class="col-lg-6 mx-auto">
+            <div class="card bg-light">
+                <div class="card-body text-center">
+                    <h5 class="card-title">
+                        <i class="fas fa-clock me-2"></i>Daily Usage
+                    </h5>
+                    <div class="progress mb-3">
+                        <div class="progress-bar" role="progressbar" 
+                             style="width: {{ (current_user.daily_usage / 120) * 100 }}%"
+                             aria-valuenow="{{ current_user.daily_usage }}" 
+                             aria-valuemin="0" 
+                             aria-valuemax="120">
+                        </div>
+                    </div>
+                    <p class="card-text">
+                        {{ current_user.daily_usage }} / 120 minutes used today
+                    </p>
+                    {% if current_user.daily_usage >= 120 %}
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Daily limit reached! Take a break and come back tomorrow.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

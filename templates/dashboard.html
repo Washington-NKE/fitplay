@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - FitPlay{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">
+                <i class="fas fa-chart-line me-2"></i>Fitness Dashboard
+            </h2>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card stats-card bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title">Total Points</h6>
+                            <h3 class="mb-0" id="total-points">{{ current_user.points }}</h3>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-star fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card stats-card bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title">Workouts</h6>
+                            <h3 class="mb-0" id="total-workouts">{{ current_user.workouts_completed }}</h3>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-dumbbell fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card stats-card bg-danger text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title">Calories</h6>
+                            <h3 class="mb-0" id="total-calories">{{ current_user.calories_burned }}</h3>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-fire fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card stats-card bg-info text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title">Time Active</h6>
+                            <h3 class="mb-0" id="total-time">{{ "%.1f"|format(current_user.time_active) }}min</h3>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-clock fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-bar me-2"></i>Weekly Progress
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="weeklyChart" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-trophy me-2"></i>Achievement Progress
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="achievement-item mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Workout Streak</span>
+                            <span class="text-muted">{{ current_user.workouts_completed }}/7</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" style="width: {{ (current_user.workouts_completed / 7 * 100) if current_user.workouts_completed < 7 else 100 }}%"></div>
+                        </div>
+                    </div>
+                    <div class="achievement-item mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Calorie Burner</span>
+                            <span class="text-muted">{{ current_user.calories_burned }}/1000</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-danger" style="width: {{ (current_user.calories_burned / 1000 * 100) if current_user.calories_burned < 1000 else 100 }}%"></div>
+                        </div>
+                    </div>
+                    <div class="achievement-item mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Time Warrior</span>
+                            <span class="text-muted">{{ "%.1f"|format(current_user.time_active) }}/60min</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-info" style="width: {{ (current_user.time_active / 60 * 100) if current_user.time_active < 60 else 100 }}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activities -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-history me-2"></i>Recent Activities
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_activities %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Activity</th>
+                                    <th>Points</th>
+                                    <th>Calories</th>
+                                    <th>Duration</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for activity in recent_activities %}
+                                <tr>
+                                    <td>
+                                        <i class="fas fa-gamepad me-2 text-primary"></i>
+                                        {{ activity.type }}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-warning text-dark">
+                                            +{{ activity.points }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-danger">
+                                            {{ activity.calories }} cal
+                                        </span>
+                                    </td>
+                                    <td>{{ activity.duration }}min</td>
+                                    <td class="text-muted">{{ activity.timestamp }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-running fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">No activities yet. Start playing games to see your progress!</p>
+                        <a href="{{ url_for('games.games') }}" class="btn btn-primary">
+                            <i class="fas fa-play me-1"></i>Start Playing
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

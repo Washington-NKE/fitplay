@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block title %}Fitness Games - FitPlay{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">
+                <i class="fas fa-gamepad me-2"></i>Fitness Games
+            </h2>
+            <p class="lead mb-4">Choose a game and start earning points while exercising!</p>
+        </div>
+    </div>
+
+    <!-- Game Selection -->
+    <div class="row mb-4" id="game-selection">
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card game-card h-100" data-game="squat_tap">
+                <div class="card-body text-center">
+                    <i class="fas fa-arrows-alt-v fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Squat Tap Challenge</h5>
+                    <p class="card-text">Tap the screen while doing squats!</p>
+                    <div class="mb-3">
+                        <span class="badge bg-warning">2 pts per squat</span>
+                        <span class="badge bg-danger">0.5 cal per squat</span>
+                    </div>
+                    <button class="btn btn-primary w-100" onclick="startGame('squat_tap')">
+                        <i class="fas fa-play me-1"></i>Start Game
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card game-card h-100" data-game="jump_counter">
+                <div class="card-body text-center">
+                    <i class="fas fa-arrow-up fa-3x text-success mb-3"></i>
+                    <h5 class="card-title">Jump Counter</h5>
+                    <p class="card-text">Jump and tap to count your jumps!</p>
+                    <div class="mb-3">
+                        <span class="badge bg-warning">3 pts per jump</span>
+                        <span class="badge bg-danger">0.8 cal per jump</span>
+                    </div>
+                    <button class="btn btn-success w-100" onclick="startGame('jump_counter')">
+                        <i class="fas fa-play me-1"></i>Start Game
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card game-card h-100" data-game="plank_timer">
+                <div class="card-body text-center">
+                    <i class="fas fa-clock fa-3x text-info mb-3"></i>
+                    <h5 class="card-title">Plank Timer</h5>
+                    <p class="card-text">Hold your plank and beat the timer!</p>
+                    <div class="mb-3">
+                        <span class="badge bg-warning">5 pts per second</span>
+                        <span class="badge bg-danger">0.1 cal per second</span>
+                    </div>
+                    <button class="btn btn-info w-100" onclick="startGame('plank_timer')">
+                        <i class="fas fa-play me-1"></i>Start Game
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card game-card h-100" data-game="burpee_challenge">
+                <div class="card-body text-center">
+                    <i class="fas fa-dumbbell fa-3x text-warning mb-3"></i>
+                    <h5 class="card-title">Burpee Challenge</h5>
+                    <p class="card-text">Complete burpees for maximum points!</p>
+                    <div class="mb-3">
+                        <span class="badge bg-warning">10 pts per burpee</span>
+                        <span class="badge bg-danger">1.5 cal per burpee</span>
+                    </div>
+                    <button class="btn btn-warning w-100" onclick="startGame('burpee_challenge')">
+                        <i class="fas fa-play me-1"></i>Start Game
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Interface -->
+    <div class="row d-none" id="game-interface">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0" id="game-title">
+                            <i class="fas fa-gamepad me-2"></i>Game Active
+                        </h5>
+                        <button class="btn btn-outline-danger btn-sm" onclick="endGame()">
+                            <i class="fas fa-stop me-1"></i>End Game
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body text-center">
+                    <!-- Game Stats -->
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <div class="stat-display">
+                                <i class="fas fa-stopwatch fa-2x text-primary mb-2"></i>
+                                <div class="h4" id="game-timer">0:00</div>
+                                <small class="text-muted">Time</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-display">
+                                <i class="fas fa-trophy fa-2x text-warning mb-2"></i>
+                                <div class="h4" id="game-score">0</div>
+                                <small class="text-muted">Score</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-display">
+                                <i class="fas fa-star fa-2x text-success mb-2"></i>
+                                <div class="h4" id="game-points">0</div>
+                                <small class="text-muted">Points</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-display">
+                                <i class="fas fa-fire fa-2x text-danger mb-2"></i>
+                                <div class="h4" id="game-calories">0</div>
+                                <small class="text-muted">Calories</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Game Action Area -->
+                    <div class="game-action-area mb-4">
+                        <button class="btn btn-primary btn-lg game-action-btn" id="action-button" onclick="gameAction()">
+                            <i class="fas fa-hand-pointer me-2"></i>TAP TO PLAY
+                        </button>
+                        <div class="mt-3" id="game-instructions">
+                            <p class="text-muted">Click the button each time you complete the exercise!</p>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="progress mb-3">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                             id="game-progress" 
+                             role="progressbar" 
+                             style="width: 0%"
+                             aria-valuenow="0" 
+                             aria-valuemin="0" 
+                             aria-valuemax="100">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Results Modal -->
+    <div class="modal fade" id="gameResultsModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-trophy me-2"></i>Game Complete!
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-medal fa-4x text-warning mb-3"></i>
+                        <h4>Great Job!</h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="stat-display">
+                                <i class="fas fa-star fa-2x text-success mb-2"></i>
+                                <div class="h4" id="result-points">0</div>
+                                <small class="text-muted">Points Earned</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-display">
+                                <i class="fas fa-fire fa-2x text-danger mb-2"></i>
+                                <div class="h4" id="result-calories">0</div>
+                                <small class="text-muted">Calories Burned</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3" id="new-badges"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="playAgain()">Play Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/games.js') }}"></script>
+{% endblock %}

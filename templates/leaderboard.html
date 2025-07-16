@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block title %}Leaderboard - FitPlay{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">
+                <i class="fas fa-trophy me-2"></i>Leaderboard
+            </h2>
+            <p class="lead mb-4">See how you stack up against other FitPlay users!</p>
+        </div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-star me-2"></i>Top Players
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if leaderboard %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Player</th>
+                                    <th>Points</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for player in leaderboard %}
+                                <tr {% if player.username == current_user.username %}class="table-primary"{% endif %}>
+                                    <td>
+                                        {% if player.rank == 1 %}
+                                            <i class="fas fa-trophy text-warning me-2"></i>
+                                        {% elif player.rank == 2 %}
+                                            <i class="fas fa-medal text-secondary me-2"></i>
+                                        {% elif player.rank == 3 %}
+                                            <i class="fas fa-award text-warning me-2"></i>
+                                        {% else %}
+                                            <span class="me-4">{{ player.rank }}</span>
+                                        {% endif %}
+                                        {% if player.rank <= 3 %}{{ player.rank }}{% endif %}
+                                    </td>
+                                    <td>
+                                        <strong>{{ player.username }}</strong>
+                                        {% if player.username == current_user.username %}
+                                            <span class="badge bg-primary ms-2">You</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-warning text-dark">
+                                            {{ player.points }} pts
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {% if player.rank == 1 %}
+                                            <span class="badge bg-success">Champion</span>
+                                        {% elif player.rank <= 3 %}
+                                            <span class="badge bg-info">Top 3</span>
+                                        {% elif player.rank <= 10 %}
+                                            <span class="badge bg-secondary">Top 10</span>
+                                        {% else %}
+                                            <span class="badge bg-light text-dark">Climbing</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-trophy fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">No leaderboard data available yet.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Player Stats -->
+    <div class="row mt-4">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user me-2"></i>Your Stats
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3 mb-3">
+                            <div class="stat-item">
+                                <i class="fas fa-star fa-2x text-warning mb-2"></i>
+                                <h4>{{ current_user.points }}</h4>
+                                <p class="text-muted">Total Points</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="stat-item">
+                                <i class="fas fa-dumbbell fa-2x text-success mb-2"></i>
+                                <h4>{{ current_user.workouts_completed }}</h4>
+                                <p class="text-muted">Workouts</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="stat-item">
+                                <i class="fas fa-fire fa-2x text-danger mb-2"></i>
+                                <h4>{{ current_user.calories_burned }}</h4>
+                                <p class="text-muted">Calories Burned</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="stat-item">
+                                <i class="fas fa-medal fa-2x text-info mb-2"></i>
+                                <h4>{{ current_user.badges|length }}</h4>
+                                <p class="text-muted">Badges</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Challenges -->
+    <div class="row mt-4">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-bullseye me-2"></i>Weekly Challenges
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="challenge-card">
+                                <div class="challenge-header">
+                                    <i class="fas fa-fire text-danger me-2"></i>
+                                    <strong>Calorie Crusher</strong>
+                                </div>
+                                <div class="challenge-content">
+                                    <p>Burn 500 calories this week</p>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-danger" style="width: {{ (current_user.calories_burned / 500 * 100) if current_user.calories_burned < 500 else 100 }}%"></div>
+                                    </div>
+                                    <small class="text-muted">{{ current_user.calories_burned }}/500 calories</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="challenge-card">
+                                <div class="challenge-header">
+                                    <i class="fas fa-dumbbell text-success me-2"></i>
+                                    <strong>Workout Warrior</strong>
+                                </div>
+                                <div class="challenge-content">
+                                    <p>Complete 5 workouts this week</p>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-success" style="width: {{ (current_user.workouts_completed / 5 * 100) if current_user.workouts_completed < 5 else 100 }}%"></div>
+                                    </div>
+                                    <small class="text-muted">{{ current_user.workouts_completed }}/5 workouts</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="challenge-card">
+                                <div class="challenge-header">
+                                    <i class="fas fa-clock text-info me-2"></i>
+                                    <strong>Time Master</strong>
+                                </div>
+                                <div class="challenge-content">
+                                    <p>Be active for 30 minutes</p>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-info" style="width: {{ (current_user.time_active / 30 * 100) if current_user.time_active < 30 else 100 }}%"></div>
+                                    </div>
+                                    <small class="text-muted">{{ "%.1f"|format(current_user.time_active) }}/30 minutes</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="row mt-4">
+        <div class="col-lg-8 mx-auto text-center">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Ready to climb the leaderboard?</h5>
+                    <p class="card-text">Start playing fitness games to earn more points and badges!</p>
+                    <a href="{{ url_for('games.games') }}" class="btn btn-light">
+                        <i class="fas fa-play me-1"></i>Play Games
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
