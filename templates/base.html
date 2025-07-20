@@ -11,20 +11,405 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* FitPlay Custom Styles - Fun & Animated */
+        :root {
+            --primary-color: #6c5ce7;
+            --primary-light: #a29bfe;
+            --primary-dark: #5f3dc4;
+            --secondary-color: #fd79a8;
+            --success-color: #00b894;
+            --danger-color: #e84393;
+            --warning-color: #fdcb6e;
+            --info-color: #74b9ff;
+            --light-color: #f8f9fc;
+            --lighter-color: #ffffff;
+            --dark-color: #2d3436;
+            --fitness-gradient: linear-gradient(135deg, #6c5ce7 0%, #fd79a8 100%);
+            --hero-gradient: linear-gradient(135deg, #a29bfe 0%, #fd79a8 50%, #fdcb6e 100%);
+            --card-gradient: linear-gradient(145deg, #ffffff 0%, #f8f9fc 100%);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f8f9fc 0%, #e8e4ff 100%);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated background particles */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(108, 92, 231, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(253, 121, 168, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(116, 185, 255, 0.1) 0%, transparent 50%);
+            z-index: -1;
+            animation: floatBackground 20s ease-in-out infinite;
+        }
+
+        @keyframes floatBackground {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(2deg); }
+            66% { transform: translateY(10px) rotate(-2deg); }
+        }
+
+        /* Floating emojis */
+        .floating-emoji {
+            position: fixed;
+            font-size: 2rem;
+            z-index: 1;
+            pointer-events: none;
+            animation: float 8s ease-in-out infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.3; }
+            50% { transform: translateY(50vh) rotate(180deg); opacity: 0.6; }
+            90% { opacity: 0.3; }
+        }
+
+        /* Bouncy navbar */
+        .navbar {
+            background: var(--fitness-gradient) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 3px solid rgba(255,255,255,0.2);
+            animation: slideDown 0.6s ease-out;
+            box-shadow: 0 8px 32px rgba(108, 92, 231, 0.3);
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white !important;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.1) rotate(-5deg);
+            text-shadow: 0 4px 8px rgba(0,0,0,0.4);
+        }
+
+        .navbar-brand i {
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-8px) rotate(10deg); }
+            60% { transform: translateY(-4px) rotate(-5deg); }
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9) !important;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-link:hover {
+            color: var(--warning-color) !important;
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        .nav-link:hover::before {
+            left: 100%;
+        }
+
+        /* XP Bar Animation */
+        .xp-bar-small {
+            overflow: hidden;
+            position: relative;
+            background: rgba(255,255,255,0.3) !important;
+        }
+
+        .xp-bar-small > div {
+            background: linear-gradient(90deg, var(--warning-color), #f39c12) !important;
+            animation: fillBar 2s ease-out;
+            position: relative;
+        }
+
+        .xp-bar-small > div::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            animation: shine 2s ease-out infinite;
+        }
+
+        @keyframes fillBar {
+            from { width: 0% !important; }
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            50% { left: 100%; }
+            100% { left: -100%; }
+        }
+
+        /* Dropdown animations */
+        .dropdown-menu {
+            background: var(--card-gradient);
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 12px 40px rgba(108, 92, 231, 0.2);
+            animation: bounceIn 0.4s ease-out;
+            overflow: hidden;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3) translateY(-20px); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .dropdown-item {
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            margin: 2px 4px;
+        }
+
+        .dropdown-item:hover {
+            background: var(--primary-light);
+            color: white;
+            transform: translateX(10px);
+        }
+
+        /* Alert animations */
+        .alert {
+            border: none;
+            border-radius: 16px;
+            font-weight: 500;
+            animation: slideInRight 0.5s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .alert::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: alertShine 0.8s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes alertShine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Success celebrations */
+        .alert-success {
+            background: linear-gradient(135deg, var(--success-color) 0%, #00a085 100%);
+            color: white;
+        }
+
+        .alert-success i {
+            animation: celebrate 0.8s ease-out;
+        }
+
+        @keyframes celebrate {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.2) rotate(-10deg); }
+            50% { transform: scale(1.3) rotate(10deg); }
+            75% { transform: scale(1.1) rotate(-5deg); }
+        }
+
+        /* Fun button styles */
+        .btn {
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        .btn-outline-light:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.3);
+            color: white;
+        }
+
+        /* Footer fun */
+        .footer {
+            background: linear-gradient(135deg, var(--dark-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            border-top: none;
+            margin-top: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.1), transparent, rgba(253,121,168,0.1), transparent);
+            animation: rotate 20s linear infinite;
+        }
+
+        .footer .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .footer i {
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+            
+            .floating-emoji {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Loading spinner for page transitions */
+        .page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--hero-gradient);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeOut 1s ease-out 0.5s forwards;
+            opacity: 1;
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; visibility: hidden; }
+        }
+
+        .page-loader .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
     
     {% block head %}{% endblock %}
 </head>
 <body>
+    <!-- Page Loader -->
+    <div class="page-loader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Floating Emojis -->
+    <div class="floating-emoji" style="left: 10%; animation-delay: 0s;">💪</div>
+    <div class="floating-emoji" style="left: 20%; animation-delay: 2s;">🏃‍♂️</div>
+    <div class="floating-emoji" style="left: 30%; animation-delay: 4s;">🎯</div>
+    <div class="floating-emoji" style="left: 40%; animation-delay: 1s;">⭐</div>
+    <div class="floating-emoji" style="left: 50%; animation-delay: 3s;">🔥</div>
+    <div class="floating-emoji" style="left: 60%; animation-delay: 5s;">🏆</div>
+    <div class="floating-emoji" style="left: 70%; animation-delay: 1.5s;">💎</div>
+    <div class="floating-emoji" style="left: 80%; animation-delay: 3.5s;">🚀</div>
+    <div class="floating-emoji" style="left: 90%; animation-delay: 2.5s;">✨</div>
+
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="{{ url_for('main.index') }}">
+            <a class="navbar-brand" href="{{ url_for('main.index') }}">
                 <i class="fas fa-dumbbell me-2"></i>FitPlay
             </a>
             
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             
@@ -35,74 +420,111 @@
                             <i class="fas fa-home me-1"></i>Home
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('dashboard.dashboard') }}">
-                            <i class="fas fa-chart-line me-1"></i>Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('games.games') }}">
-                            <i class="fas fa-gamepad me-1"></i>Games
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('diet.diet') }}">
-                            <i class="fas fa-utensils me-1"></i>Diet
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('main.leaderboard') }}">
-                            <i class="fas fa-trophy me-1"></i>Leaderboard
-                        </a>
-                    </li>
+                    {% if current_user %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('dashboard.dashboard') }}">
+                                <i class="fas fa-chart-line me-1"></i>Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('games.games') }}">
+                                <i class="fas fa-gamepad me-1"></i>Games
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('diet.diet') }}">
+                                <i class="fas fa-utensils me-1"></i>Diet
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('main.leaderboard') }}">
+                                <i class="fas fa-trophy me-1"></i>Leaderboard
+                            </a>
+                        </li>
+                    {% endif %}
                 </ul>
                 
                 <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user me-1"></i>{{ current_user.username }}
-                            <span class="badge bg-warning text-dark ms-1">{{ current_user.points }}</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ url_for('main.profile') }}">
-                                <i class="fas fa-user-cog me-2"></i>Profile
-                            </a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><span class="dropdown-item-text">
-                                <small>Daily Usage: {{ current_user.daily_usage }}min</small>
-                            </span></li>
-                        </ul>
-                    </li>
+                    {% if current_user %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user me-2"></i>
+                                <div class="d-flex flex-column align-items-start">
+                                    <span>{{ current_user.username }}</span>
+                                    <small class="text-light opacity-75">Lv.{{ current_user.profile.level }}</small>
+                                </div>
+                                <div class="ms-2">
+                                    <div class="xp-bar-small bg-secondary rounded" style="width: 60px; height: 6px; position: relative;">
+                                        <div class="bg-warning rounded" style="width: {{ (current_user.profile.xp % 1000) / 10 }}%; height: 100%;"></div>
+                                    </div>
+                                    <small class="text-light opacity-75">{{ current_user.profile.xp % 1000 }}/1000 XP</small>
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="{{ url_for('auth.profile') }}">
+                                        <i class="fas fa-user-cog me-2"></i>Profile
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <span class="dropdown-item-text">
+                                        <small><i class="fas fa-clock me-1"></i>Daily Usage: {{ current_user.profile.daily_usage }}min</small>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="dropdown-item-text">
+                                        <small><i class="fas fa-fire me-1"></i>Streak: {{ current_user.profile.streak }} days</small>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="dropdown-item-text">
+                                        <small><i class="fas fa-trophy me-1"></i>Workouts: {{ current_user.profile.total_workouts }}</small>
+                                    </span>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item text-danger" href="{{ url_for('auth.logout') }}">
+                                        <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('auth.login') }}">
+                                <i class="fas fa-sign-in-alt me-1"></i>Login
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-outline-light ms-2 px-3" href="{{ url_for('auth.signup') }}">
+                                <i class="fas fa-user-plus me-1"></i>Sign Up
+                            </a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="main-content">
+    <main class="main-content" style="padding-top: 100px; min-height: calc(100vh - 200px);">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                {% endfor %}
+                <div class="container mt-3">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ 'success' if category == 'success' else 'danger' if category == 'error' else 'warning' if category == 'warning' else 'info' }} alert-dismissible fade show" role="alert">
+                            <i class="fas fa-{{ 'check-circle' if category == 'success' else 'exclamation-triangle' if category == 'error' else 'info-circle' }} me-2"></i>
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                </div>
             {% endif %}
         {% endwith %}
         
         {% block content %}{% endblock %}
     </main>
-
-    <!-- Footer -->
-    <footer class="footer mt-auto py-3 bg-light">
-        <div class="container text-center">
-            <span class="text-muted">
-                <i class="fas fa-heart text-danger me-1"></i>
-                FitPlay - Making fitness fun and accessible for everyone!
-            </span>
-        </div>
-    </footer>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -111,5 +533,112 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     {% block scripts %}{% endblock %}
+
+    <script>
+        // Auto-hide flash messages with celebration effect
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                alert.style.animation = 'slideOutRight 0.5s ease-out forwards';
+                setTimeout(() => {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                }, 500);
+            });
+        }, 5000);
+
+        // Add celebration particles on success
+        function createCelebrationParticles() {
+            const particles = ['🎉', '✨', '🎊', '⭐', '💫'];
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.innerHTML = particles[Math.floor(Math.random() * particles.length)];
+                particle.style.cssText = `
+                    position: fixed;
+                    top: 20%;
+                    left: ${Math.random() * 100}%;
+                    font-size: ${Math.random() * 20 + 20}px;
+                    z-index: 9999;
+                    pointer-events: none;
+                    animation: celebrationParticle ${Math.random() * 2 + 3}s ease-out forwards;
+                `;
+                document.body.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 5000);
+            }
+        }
+
+        // Add CSS for celebration particles
+        const celebrationCSS = `
+            @keyframes celebrationParticle {
+                0% {
+                    opacity: 1;
+                    transform: translateY(0) rotate(0deg) scale(1);
+                }
+                100% {
+                    opacity: 0;
+                    transform: translateY(-200px) rotate(360deg) scale(0.5);
+                }
+            }
+            
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = celebrationCSS;
+        document.head.appendChild(styleSheet);
+
+        // Trigger celebration for success alerts
+        document.addEventListener('DOMContentLoaded', function() {
+            const successAlerts = document.querySelectorAll('.alert-success');
+            if (successAlerts.length > 0) {
+                setTimeout(createCelebrationParticles, 300);
+            }
+        });
+
+        // Add click wave effect to buttons
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('btn')) {
+                const ripple = document.createElement('div');
+                const rect = e.target.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                ripple.style.cssText = `
+                    position: absolute;
+                    border-radius: 50%;
+                    background: rgba(255,255,255,0.6);
+                    transform: scale(0);
+                    animation: ripple 0.6s linear;
+                    left: ${e.clientX - rect.left - size/2}px;
+                    top: ${e.clientY - rect.top - size/2}px;
+                    width: ${size}px;
+                    height: ${size}px;
+                    pointer-events: none;
+                `;
+                
+                e.target.style.position = 'relative';
+                e.target.style.overflow = 'hidden';
+                e.target.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
+            }
+        });
+
+        // Add ripple animation
+        const rippleCSS = `
+            @keyframes ripple {
+                to {
+                    transform: scale(2);
+                    opacity: 0;
+                }
+            }
+        `;
+        
+        const rippleStyleSheet = document.createElement('style');
+        rippleStyleSheet.textContent = rippleCSS;
+        document.head.appendChild(rippleStyleSheet);
+    </script>
 </body>
 </html>

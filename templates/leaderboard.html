@@ -3,20 +3,423 @@
 {% block title %}Leaderboard - FitPlay{% endblock %}
 
 {% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Nunito:wght@400;600;700;800&family=Baloo+2:wght@400;500;600;700;800&display=swap');
+    
+    :root {
+        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --gold-gradient: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+        --silver-gradient: linear-gradient(135deg, #8e9aaf 0%, #cfd9df 100%);
+        --bronze-gradient: linear-gradient(135deg, #cd7f32 0%, #ffa500 100%);
+        --glow-purple: 0 0 20px rgba(102, 126, 234, 0.5);
+        --glow-gold: 0 0 20px rgba(255, 210, 0, 0.5);
+    }
+    
+    .leaderboard-title {
+        font-family: 'Fredoka One', cursive;
+        font-size: 3.5rem;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-align: center;
+        margin-bottom: 1rem;
+        animation: titleBounce 2s ease-in-out infinite;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    @keyframes titleBounce {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+    
+    .lead-text {
+        font-family: 'Baloo 2', cursive;
+        font-weight: 600;
+        font-size: 1.3rem;
+        text-align: center;
+        color: #6c757d;
+        animation: fadeInUp 1s ease-out;
+    }
+    
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .leaderboard-card {
+        background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        animation: slideInLeft 1s ease-out;
+        overflow: hidden;
+    }
+    
+    @keyframes slideInLeft {
+        from { opacity: 0; transform: translateX(-50px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    
+    .card-header {
+        background: var(--primary-gradient);
+        color: white;
+        border: none;
+        padding: 20px;
+        font-family: 'Baloo 2', cursive;
+        font-weight: 700;
+        font-size: 1.4rem;
+    }
+    
+    .trophy-icon {
+        animation: rotatePulse 3s ease-in-out infinite;
+        display: inline-block;
+    }
+    
+    @keyframes rotatePulse {
+        0%, 100% { transform: scale(1) rotate(0deg); }
+        25% { transform: scale(1.1) rotate(-5deg); }
+        50% { transform: scale(1.2) rotate(0deg); }
+        75% { transform: scale(1.1) rotate(5deg); }
+    }
+    
+    .leaderboard-table {
+        font-family: 'Nunito', sans-serif;
+    }
+    
+    .leaderboard-table thead th {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-size: 0.9rem;
+        border: none;
+        padding: 15px;
+    }
+    
+    .leaderboard-table tbody tr {
+        animation: fadeInRow 0.8s ease-out;
+        transition: all 0.3s ease;
+    }
+    
+    .leaderboard-table tbody tr:nth-child(1) { animation-delay: 0.1s; }
+    .leaderboard-table tbody tr:nth-child(2) { animation-delay: 0.2s; }
+    .leaderboard-table tbody tr:nth-child(3) { animation-delay: 0.3s; }
+    .leaderboard-table tbody tr:nth-child(4) { animation-delay: 0.4s; }
+    .leaderboard-table tbody tr:nth-child(5) { animation-delay: 0.5s; }
+    
+    @keyframes fadeInRow {
+        from { opacity: 0; transform: translateX(-20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    
+    .leaderboard-table tbody tr:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .rank-1 {
+        background: linear-gradient(135deg, #fff9c4 0%, #f7e98e 100%);
+        border-left: 5px solid #ffd700;
+        font-weight: bold;
+        animation: goldShimmer 2s ease-in-out infinite;
+    }
+    
+    .rank-2 {
+        background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+        border-left: 5px solid #c0c0c0;
+        font-weight: bold;
+    }
+    
+    .rank-3 {
+        background: linear-gradient(135deg, #ffe4b5 0%, #ddbea9 100%);
+        border-left: 5px solid #cd7f32;
+        font-weight: bold;
+    }
+    
+    @keyframes goldShimmer {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+    
+    .trophy-gold {
+        color: #ffd700;
+        animation: bounce 2s infinite;
+        filter: drop-shadow(0 0 5px #ffd700);
+    }
+    
+    .trophy-silver {
+        color: #c0c0c0;
+        animation: bounce 2s infinite;
+        animation-delay: 0.2s;
+        filter: drop-shadow(0 0 5px #c0c0c0);
+    }
+    
+    .trophy-bronze {
+        color: #cd7f32;
+        animation: bounce 2s infinite;
+        animation-delay: 0.4s;
+        filter: drop-shadow(0 0 5px #cd7f32);
+    }
+    
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-10px); }
+        60% { transform: translateY(-5px); }
+    }
+    
+    .player-name {
+        font-family: 'Baloo 2', cursive;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+    
+    .you-badge {
+        animation: pulseGlow 2s ease-in-out infinite;
+        font-family: 'Fredoka One', cursive;
+        font-size: 0.8rem;
+    }
+    
+    @keyframes pulseGlow {
+        0%, 100% { box-shadow: 0 0 5px rgba(13, 110, 253, 0.5); }
+        50% { box-shadow: 0 0 20px rgba(13, 110, 253, 0.8); }
+    }
+    
+    .points-badge {
+        font-family: 'Nunito', sans-serif;
+        font-weight: 800;
+        font-size: 1rem;
+        animation: pointsPulse 3s ease-in-out infinite;
+    }
+    
+    @keyframes pointsPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+    
+    .status-badge {
+        font-family: 'Baloo 2', cursive;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .stats-card {
+        background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        animation: slideInRight 1s ease-out;
+        animation-delay: 0.3s;
+        opacity: 0;
+        animation-fill-mode: forwards;
+    }
+    
+    @keyframes slideInRight {
+        from { opacity: 0; transform: translateX(50px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    
+    .stat-item {
+        transition: all 0.3s ease;
+        padding: 20px;
+        border-radius: 15px;
+        margin: 10px 0;
+    }
+    
+    .stat-item:hover {
+        transform: translateY(-5px) scale(1.05);
+        background: linear-gradient(145deg, #f8f9fa 0%, #ffffff 100%);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+    
+    .stat-item i {
+        animation: iconFloat 3s ease-in-out infinite;
+    }
+    
+    .stat-item:nth-child(1) i { animation-delay: 0s; }
+    .stat-item:nth-child(2) i { animation-delay: 0.5s; }
+    .stat-item:nth-child(3) i { animation-delay: 1s; }
+    .stat-item:nth-child(4) i { animation-delay: 1.5s; }
+    
+    @keyframes iconFloat {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-8px); }
+    }
+    
+    .stat-item h4 {
+        font-family: 'Fredoka One', cursive;
+        font-size: 2.5rem;
+        margin: 10px 0;
+        color: #495057;
+    }
+    
+    .stat-item p {
+        font-family: 'Baloo 2', cursive;
+        font-weight: 600;
+        margin: 0;
+    }
+    
+    .challenge-card {
+        background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        animation: slideInUp 0.8s ease-out;
+        animation-delay: 0.6s;
+        opacity: 0;
+        animation-fill-mode: forwards;
+    }
+    
+    @keyframes slideInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .challenge-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+    
+    .challenge-header {
+        font-family: 'Baloo 2', cursive;
+        font-weight: 700;
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+        color: #495057;
+    }
+    
+    .challenge-content p {
+        font-family: 'Nunito', sans-serif;
+        font-weight: 600;
+        color: #6c757d;
+    }
+    
+    .progress {
+        height: 8px;
+        border-radius: 20px;
+        overflow: hidden;
+        background-color: #e9ecef;
+        margin: 10px 0;
+    }
+    
+    .progress-bar {
+        transition: width 2s ease-in-out;
+        border-radius: 20px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .progress-bar::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background-image: linear-gradient(45deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, transparent 75%, transparent);
+        background-size: 30px 30px;
+        animation: progressShine 2s linear infinite;
+    }
+    
+    @keyframes progressShine {
+        0% { background-position: 0 0; }
+        100% { background-position: 30px 0; }
+    }
+    
+    .cta-card {
+        background: var(--primary-gradient);
+        border: none;
+        border-radius: 20px;
+        box-shadow: var(--glow-purple);
+        animation: ctaPulse 4s ease-in-out infinite;
+        animation-delay: 1s;
+        opacity: 0;
+        animation-fill-mode: forwards;
+    }
+    
+    @keyframes ctaPulse {
+        0%, 100% { 
+            opacity: 1;
+            box-shadow: var(--glow-purple);
+            transform: scale(1);
+        }
+        50% { 
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.8);
+            transform: scale(1.02);
+        }
+    }
+    
+    .cta-card .card-title {
+        font-family: 'Fredoka One', cursive;
+        font-size: 1.8rem;
+    }
+    
+    .cta-card .card-text {
+        font-family: 'Baloo 2', cursive;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+    
+    .btn-light {
+        font-family: 'Baloo 2', cursive;
+        font-weight: 700;
+        font-size: 1.1rem;
+        padding: 12px 30px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .btn-light:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+    
+    .no-data-icon {
+        animation: sadBounce 2s ease-in-out infinite;
+    }
+    
+    @keyframes sadBounce {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        25% { transform: translateY(-5px) rotate(-2deg); }
+        50% { transform: translateY(0px) rotate(0deg); }
+        75% { transform: translateY(-3px) rotate(2deg); }
+    }
+    
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .leaderboard-title {
+            font-size: 2.5rem;
+        }
+        
+        .stat-item h4 {
+            font-size: 2rem;
+        }
+        
+        .challenge-card {
+            margin-bottom: 15px;
+        }
+    }
+</style>
+
 <div class="container mt-5">
     <div class="row">
         <div class="col-12">
-            <h2 class="mb-4">
-                <i class="fas fa-trophy me-2"></i>Leaderboard
+            <h2 class="leaderboard-title">
+                <i class="fas fa-trophy me-3 trophy-icon"></i>Leaderboard
             </h2>
-            <p class="lead mb-4">See how you stack up against other FitPlay users!</p>
+            <p class="lead-text mb-4">See how you stack up against other FitPlay users!</p>
         </div>
     </div>
 
     <!-- Leaderboard -->
     <div class="row">
         <div class="col-lg-8 mx-auto">
-            <div class="card">
+            <div class="card leaderboard-card">
                 <div class="card-header">
                     <h5 class="mb-0">
                         <i class="fas fa-star me-2"></i>Top Players
@@ -25,7 +428,7 @@
                 <div class="card-body">
                     {% if leaderboard %}
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table table-hover leaderboard-table">
                             <thead>
                                 <tr>
                                     <th>Rank</th>
@@ -36,39 +439,41 @@
                             </thead>
                             <tbody>
                                 {% for player in leaderboard %}
-                                <tr {% if player.username == current_user.username %}class="table-primary"{% endif %}>
+                                <tr class="{% if player.rank == 1 %}rank-1{% elif player.rank == 2 %}rank-2{% elif player.rank == 3 %}rank-3{% endif %}{% if player.username == current_user['username'] %} table-primary{% endif %}">
                                     <td>
                                         {% if player.rank == 1 %}
-                                            <i class="fas fa-trophy text-warning me-2"></i>
+                                            <i class="fas fa-trophy trophy-gold me-2"></i>
                                         {% elif player.rank == 2 %}
-                                            <i class="fas fa-medal text-secondary me-2"></i>
+                                            <i class="fas fa-medal trophy-silver me-2"></i>
                                         {% elif player.rank == 3 %}
-                                            <i class="fas fa-award text-warning me-2"></i>
+                                            <i class="fas fa-award trophy-bronze me-2"></i>
                                         {% else %}
-                                            <span class="me-4">{{ player.rank }}</span>
+                                            <span class="me-4 fw-bold">{{ player.rank }}</span>
                                         {% endif %}
-                                        {% if player.rank <= 3 %}{{ player.rank }}{% endif %}
-                                    </td>
-                                    <td>
-                                        <strong>{{ player.username }}</strong>
-                                        {% if player.username == current_user.username %}
-                                            <span class="badge bg-primary ms-2">You</span>
+                                        {% if player.rank <= 3 %}
+                                            <span class="fw-bold">{{ player.rank }}</span>
                                         {% endif %}
                                     </td>
                                     <td>
-                                        <span class="badge bg-warning text-dark">
+                                        <strong class="player-name">{{ player.username }}</strong>
+                                        {% if player.username == current_user['username'] %}
+                                            <span class="badge bg-primary ms-2 you-badge">You</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-warning text-dark points-badge">
                                             {{ player.points }} pts
                                         </span>
                                     </td>
                                     <td>
                                         {% if player.rank == 1 %}
-                                            <span class="badge bg-success">Champion</span>
+                                            <span class="badge bg-success status-badge">Champion</span>
                                         {% elif player.rank <= 3 %}
-                                            <span class="badge bg-info">Top 3</span>
+                                            <span class="badge bg-info status-badge">Top 3</span>
                                         {% elif player.rank <= 10 %}
-                                            <span class="badge bg-secondary">Top 10</span>
+                                            <span class="badge bg-secondary status-badge">Top 10</span>
                                         {% else %}
-                                            <span class="badge bg-light text-dark">Climbing</span>
+                                            <span class="badge bg-light text-dark status-badge">Climbing</span>
                                         {% endif %}
                                     </td>
                                 </tr>
@@ -78,8 +483,8 @@
                     </div>
                     {% else %}
                     <div class="text-center py-4">
-                        <i class="fas fa-trophy fa-3x text-muted mb-3"></i>
-                        <p class="text-muted">No leaderboard data available yet.</p>
+                        <i class="fas fa-trophy fa-3x text-muted mb-3 no-data-icon"></i>
+                        <p class="text-muted lead-text">No leaderboard data available yet.</p>
                     </div>
                     {% endif %}
                 </div>
@@ -90,7 +495,7 @@
     <!-- Player Stats -->
     <div class="row mt-4">
         <div class="col-lg-8 mx-auto">
-            <div class="card">
+            <div class="card stats-card">
                 <div class="card-header">
                     <h5 class="mb-0">
                         <i class="fas fa-user me-2"></i>Your Stats
@@ -101,28 +506,28 @@
                         <div class="col-md-3 mb-3">
                             <div class="stat-item">
                                 <i class="fas fa-star fa-2x text-warning mb-2"></i>
-                                <h4>{{ current_user.points }}</h4>
+                                <h4>{{ current_user.get('profile', {}).get('xp', 0) }}</h4>
                                 <p class="text-muted">Total Points</p>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="stat-item">
                                 <i class="fas fa-dumbbell fa-2x text-success mb-2"></i>
-                                <h4>{{ current_user.workouts_completed }}</h4>
+                                <h4>{{ current_user.get('profile', {}).get('total_workouts', 0) }}</h4>
                                 <p class="text-muted">Workouts</p>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="stat-item">
                                 <i class="fas fa-fire fa-2x text-danger mb-2"></i>
-                                <h4>{{ current_user.calories_burned }}</h4>
+                                <h4>{{ current_user.get('diet', {}).get('daily_calories', 0) }}</h4>
                                 <p class="text-muted">Calories Burned</p>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <div class="stat-item">
                                 <i class="fas fa-medal fa-2x text-info mb-2"></i>
-                                <h4>{{ current_user.badges|length }}</h4>
+                                <h4>{{ current_user.get('profile', {}).get('badges', [])|length }}</h4>
                                 <p class="text-muted">Badges</p>
                             </div>
                         </div>
@@ -135,7 +540,7 @@
     <!-- Challenges -->
     <div class="row mt-4">
         <div class="col-lg-8 mx-auto">
-            <div class="card">
+            <div class="card stats-card">
                 <div class="card-header">
                     <h5 class="mb-0">
                         <i class="fas fa-bullseye me-2"></i>Weekly Challenges
@@ -151,10 +556,11 @@
                                 </div>
                                 <div class="challenge-content">
                                     <p>Burn 500 calories this week</p>
+                                    {% set calories_burned = current_user.get('diet', {}).get('daily_calories', 0) %}
                                     <div class="progress">
-                                        <div class="progress-bar bg-danger" style="width: {{ (current_user.calories_burned / 500 * 100) if current_user.calories_burned < 500 else 100 }}%"></div>
+                                        <div class="progress-bar bg-danger" style="width: {{ (calories_burned / 500 * 100) if calories_burned < 500 else 100 }}%"></div>
                                     </div>
-                                    <small class="text-muted">{{ current_user.calories_burned }}/500 calories</small>
+                                    <small class="text-muted">{{ calories_burned }}/500 calories</small>
                                 </div>
                             </div>
                         </div>
@@ -166,10 +572,11 @@
                                 </div>
                                 <div class="challenge-content">
                                     <p>Complete 5 workouts this week</p>
+                                    {% set workouts_completed = current_user.get('profile', {}).get('total_workouts', 0) %}
                                     <div class="progress">
-                                        <div class="progress-bar bg-success" style="width: {{ (current_user.workouts_completed / 5 * 100) if current_user.workouts_completed < 5 else 100 }}%"></div>
+                                        <div class="progress-bar bg-success" style="width: {{ (workouts_completed / 5 * 100) if workouts_completed < 5 else 100 }}%"></div>
                                     </div>
-                                    <small class="text-muted">{{ current_user.workouts_completed }}/5 workouts</small>
+                                    <small class="text-muted">{{ workouts_completed }}/5 workouts</small>
                                 </div>
                             </div>
                         </div>
@@ -181,10 +588,11 @@
                                 </div>
                                 <div class="challenge-content">
                                     <p>Be active for 30 minutes</p>
+                                    {% set time_active = current_user.get('profile', {}).get('daily_usage', 0) %}
                                     <div class="progress">
-                                        <div class="progress-bar bg-info" style="width: {{ (current_user.time_active / 30 * 100) if current_user.time_active < 30 else 100 }}%"></div>
+                                        <div class="progress-bar bg-info" style="width: {{ (time_active / 30 * 100) if time_active < 30 else 100 }}%"></div>
                                     </div>
-                                    <small class="text-muted">{{ "%.1f"|format(current_user.time_active) }}/30 minutes</small>
+                                    <small class="text-muted">{{ "%.1f"|format(time_active) }}/30 minutes</small>
                                 </div>
                             </div>
                         </div>
@@ -197,7 +605,7 @@
     <!-- Call to Action -->
     <div class="row mt-4">
         <div class="col-lg-8 mx-auto text-center">
-            <div class="card bg-primary text-white">
+            <div class="card cta-card text-white">
                 <div class="card-body">
                     <h5 class="card-title">Ready to climb the leaderboard?</h5>
                     <p class="card-text">Start playing fitness games to earn more points and badges!</p>

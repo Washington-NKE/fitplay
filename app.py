@@ -46,25 +46,20 @@ from blueprints.main import main_bp
 from blueprints.games import games_bp
 from blueprints.dashboard import dashboard_bp
 from blueprints.diet import diet_bp
+from blueprints.auth.auth import auth_bp
+from blueprints.auth.auth import get_current_user
 
 app.register_blueprint(main_bp)
 app.register_blueprint(games_bp, url_prefix='/games')
 app.register_blueprint(dashboard_bp, url_prefix='/dashboard')
 app.register_blueprint(diet_bp, url_prefix='/diet')
+app.register_blueprint(auth_bp, url_prefix='/auth')
 
 # Global template variables
 @app.context_processor
 def inject_globals():
     return {
-        'current_user': {
-            'username': session.get('username', 'FitPlayer'),
-            'points': session.get('points', 0),
-            'badges': session.get('badges', []),
-            'workouts_completed': session.get('workouts_completed', 0),
-            'calories_burned': session.get('calories_burned', 0),
-            'time_active': session.get('time_active', 0),
-            'daily_usage': session.get('daily_usage', 0)
-        }
+        'current_user': get_current_user() 
     }
 
 if __name__ == '__main__':

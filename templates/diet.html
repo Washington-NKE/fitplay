@@ -3,254 +3,998 @@
 {% block title %}Diet Plan - FitPlay{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-12">
-            <h2 class="mb-4">
-                <i class="fas fa-utensils me-2"></i>Your Personalized Diet Plan
-            </h2>
-        </div>
-    </div>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <!-- Diet Plan Overview -->
-    {% if diet_plan %}
-    <div class="row mb-4">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">
-                        <i class="fas fa-apple-alt me-2"></i>Daily Meal Plan
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <p><strong>Fitness Goal:</strong> {{ diet_plan.goal }}</p>
-                        </div>
-                        <div class="col-md-6">
-                            <p><strong>Daily Calories:</strong> {{ diet_plan.daily_calories }}</p>
-                        </div>
-                    </div>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
 
-                    <!-- Meals -->
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <div class="meal-card">
-                                <div class="meal-header">
-                                    <i class="fas fa-sun text-warning me-2"></i>
-                                    <strong>Breakfast</strong>
-                                    <span class="badge bg-warning ms-2">{{ diet_plan.meals.breakfast.calories }} cal</span>
-                                </div>
-                                <div class="meal-content">
-                                    <p class="meal-suggestion">{{ diet_plan.meals.breakfast.selected }}</p>
-                                    <details>
-                                        <summary>More options</summary>
-                                        <ul class="mt-2">
-                                            {% for option in diet_plan.meals.breakfast.options %}
-                                            <li>{{ option }}</li>
-                                            {% endfor %}
-                                        </ul>
-                                    </details>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            <div class="meal-card">
-                                <div class="meal-header">
-                                    <i class="fas fa-cloud-sun text-info me-2"></i>
-                                    <strong>Lunch</strong>
-                                    <span class="badge bg-info ms-2">{{ diet_plan.meals.lunch.calories }} cal</span>
-                                </div>
-                                <div class="meal-content">
-                                    <p class="meal-suggestion">{{ diet_plan.meals.lunch.selected }}</p>
-                                    <details>
-                                        <summary>More options</summary>
-                                        <ul class="mt-2">
-                                            {% for option in diet_plan.meals.lunch.options %}
-                                            <li>{{ option }}</li>
-                                            {% endfor %}
-                                        </ul>
-                                    </details>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            <div class="meal-card">
-                                <div class="meal-header">
-                                    <i class="fas fa-moon text-primary me-2"></i>
-                                    <strong>Dinner</strong>
-                                    <span class="badge bg-primary ms-2">{{ diet_plan.meals.dinner.calories }} cal</span>
-                                </div>
-                                <div class="meal-content">
-                                    <p class="meal-suggestion">{{ diet_plan.meals.dinner.selected }}</p>
-                                    <details>
-                                        <summary>More options</summary>
-                                        <ul class="mt-2">
-                                            {% for option in diet_plan.meals.dinner.options %}
-                                            <li>{{ option }}</li>
-                                            {% endfor %}
-                                        </ul>
-                                    </details>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            <div class="meal-card">
-                                <div class="meal-header">
-                                    <i class="fas fa-cookie-bite text-success me-2"></i>
-                                    <strong>Snacks</strong>
-                                    <span class="badge bg-success ms-2">{{ diet_plan.meals.snacks.calories }} cal</span>
-                                </div>
-                                <div class="meal-content">
-                                    <p class="meal-suggestion">{{ diet_plan.meals.snacks.selected }}</p>
-                                    <details>
-                                        <summary>More options</summary>
-                                        <ul class="mt-2">
-                                            {% for option in diet_plan.meals.snacks.options %}
-                                            <li>{{ option }}</li>
-                                            {% endfor %}
-                                        </ul>
-                                    </details>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-md-4">
-            <!-- Nutrition Tips -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0">
-                        <i class="fas fa-lightbulb me-2"></i>Nutrition Tips
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <ul class="list-unstyled">
-                        {% for tip in diet_plan.tips %}
-                        <li class="mb-2">
-                            <i class="fas fa-check text-success me-2"></i>{{ tip }}
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 3rem;
+            color: white;
+            text-align: center;
+            margin-bottom: 2rem;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            animation: titleBounce 2s ease-out;
+        }
+
+        @keyframes titleBounce {
+            0% { transform: translateY(-50px) scale(0.8); opacity: 0; }
+            50% { transform: translateY(10px) scale(1.1); }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 1.5rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.8s ease-out forwards;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .stat-card:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes slideUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .stat-value {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .meals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .meal-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translateY(30px);
+            opacity: 0;
+            animation: mealCardSlide 0.8s ease-out forwards;
+            position: relative;
+        }
+
+        .meal-card:nth-child(1) { animation-delay: 0.2s; }
+        .meal-card:nth-child(2) { animation-delay: 0.4s; }
+        .meal-card:nth-child(3) { animation-delay: 0.6s; }
+        .meal-card:nth-child(4) { animation-delay: 0.8s; }
+
+        .meal-card:hover {
+            transform: translateY(-10px) rotate(1deg);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes mealCardSlide {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .meal-header {
+            background: linear-gradient(135deg, var(--meal-color), var(--meal-color-dark));
+            color: white;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .meal-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+            opacity: 0;
+        }
+
+        .meal-card:hover .meal-header::before {
+            animation: shimmer 1.5s ease-out;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
+        }
+
+        .breakfast { --meal-color: #ff9500; --meal-color-dark: #e6851e; }
+        .lunch { --meal-color: #34c759; --meal-color-dark: #2ea043; }
+        .dinner { --meal-color: #5856d6; --meal-color-dark: #4c4ab8; }
+        .snacks { --meal-color: #ff3b30; --meal-color-dark: #d70015; }
+
+        .meal-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .meal-icon {
+            font-size: 1.8rem;
+            animation: iconBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes iconBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .calories-badge {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .meal-content {
+            padding: 1.5rem;
+        }
+
+        .meal-suggestion {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .options-toggle {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .options-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .options-list {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            margin-top: 1rem;
+        }
+
+        .options-list.active {
+            max-height: 200px;
+        }
+
+        .option-item {
+            background: rgba(102, 126, 234, 0.1);
+            margin: 0.5rem 0;
+            padding: 0.8rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--meal-color);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .option-item:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateX(5px);
+        }
+
+        .sidebar {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            margin-bottom: 3rem;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.8s ease-out forwards;
+        }
+
+        .info-card:nth-child(1) { animation-delay: 1s; }
+        .info-card:nth-child(2) { animation-delay: 1.2s; }
+        .info-card:nth-child(3) { animation-delay: 1.4s; }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tip-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+            padding: 0.8rem;
+            background: rgba(52, 199, 89, 0.1);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .tip-item:hover {
+            background: rgba(52, 199, 89, 0.2);
+            transform: translateX(5px);
+        }
+
+        .hydration-display {
+            text-align: center;
+        }
+
+        .hydration-icon {
+            font-size: 4rem;
+            color: #007aff;
+            margin-bottom: 1rem;
+            animation: waterDrop 2s ease-in-out infinite;
+        }
+
+        @keyframes waterDrop {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.1) rotate(-5deg); }
+            75% { transform: scale(0.9) rotate(5deg); }
+        }
+
+        .water-amount {
+            font-family: 'Fredoka One', cursive;
+            font-size: 3rem;
+            color: #007aff;
+            margin-bottom: 0.5rem;
+        }
+
+        .timing-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem;
+            margin-bottom: 0.5rem;
+            background: rgba(88, 86, 214, 0.1);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .timing-item:hover {
+            background: rgba(88, 86, 214, 0.2);
+            transform: translateX(5px);
+        }
+
+        .update-form {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: translateY(30px);
+            opacity: 0;
+            animation: slideUp 0.8s ease-out 1.6s forwards;
+        }
+
+        .form-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .form-control {
+            padding: 1rem;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-radius: 15px;
+            font-size: 1rem;
+            font-family: 'Nunito', sans-serif;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Nunito', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.8);
+            color: #667eea;
+            border: 2px solid #667eea;
+            margin-left: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) { width: 20px; height: 20px; left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { width: 15px; height: 15px; left: 20%; animation-delay: 2s; }
+        .particle:nth-child(3) { width: 25px; height: 25px; left: 70%; animation-delay: 4s; }
+        .particle:nth-child(4) { width: 18px; height: 18px; left: 80%; animation-delay: 1s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
             
-            <!-- Hydration -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0">
-                        <i class="fas fa-tint me-2"></i>Hydration
-                    </h5>
-                </div>
-                <div class="card-body text-center">
-                    <i class="fas fa-glass-water fa-3x text-info mb-3"></i>
-                    <h4>{{ diet_plan.water_intake }}L</h4>
-                    <p class="text-muted">Daily water intake</p>
-                </div>
-            </div>
+            .meals-grid {
+                grid-template-columns: 1fr;
+            }
             
-            <!-- Meal Timing -->
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">
-                        <i class="fas fa-clock me-2"></i>Meal Timing
-                    </h5>
+            .btn-secondary {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <div class="container">
+        <h1 class="page-title">
+            <i class="fas fa-utensils"></i>
+            Your Epic Diet Quest!
+        </h1>
+
+        <!-- Stats Overview -->
+        <div class="stats-overview">
+            <div class="stat-card">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-value">Muscle Gain</div>
+                <div class="stat-label">Current Goal</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🔥</div>
+                <div class="stat-value">2,400</div>
+                <div class="stat-label">Daily Calories</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💧</div>
+                <div class="stat-value">3.2L</div>
+                <div class="stat-label">Water Goal</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⚡</div>
+                <div class="stat-value">Level 5</div>
+                <div class="stat-label">Diet Streak</div>
+            </div>
+        </div>
+
+        <!-- Meals Grid -->
+        <div class="meals-grid">
+            <div class="meal-card breakfast">
+                <div class="meal-header">
+                    <div class="meal-title">
+                        <i class="fas fa-sun meal-icon"></i>
+                        Breakfast
+                        <span class="calories-badge">600 cal</span>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Breakfast:</span>
-                        <span class="text-muted">{{ diet_plan.meal_timing.breakfast }}</span>
+                <div class="meal-content">
+                    <p class="meal-suggestion">
+                        🥞 Protein pancakes with Greek yogurt and mixed berries
+                    </p>
+                    <button class="options-toggle" onclick="toggleOptions(this)">
+                        <i class="fas fa-chevron-down"></i> More Breakfast Options
+                    </button>
+                    <div class="options-list">
+                        <div class="option-item">🍳 Scrambled eggs with avocado toast</div>
+                        <div class="option-item">🥣 Overnight oats with protein powder</div>
+                        <div class="option-item">🥤 Green smoothie bowl with granola</div>
                     </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Lunch:</span>
-                        <span class="text-muted">{{ diet_plan.meal_timing.lunch }}</span>
+                </div>
+            </div>
+
+            <div class="meal-card lunch">
+                <div class="meal-header">
+                    <div class="meal-title">
+                        <i class="fas fa-sun meal-icon"></i>
+                        Lunch
+                        <span class="calories-badge">700 cal</span>
                     </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Dinner:</span>
-                        <span class="text-muted">{{ diet_plan.meal_timing.dinner }}</span>
+                </div>
+                <div class="meal-content">
+                    <p class="meal-suggestion">
+                        🍗 Grilled chicken quinoa bowl with roasted vegetables
+                    </p>
+                    <button class="options-toggle" onclick="toggleOptions(this)">
+                        <i class="fas fa-chevron-down"></i> More Lunch Options
+                    </button>
+                    <div class="options-list">
+                        <div class="option-item">🥗 Power salad with salmon and nuts</div>
+                        <div class="option-item">🌯 Turkey and hummus wrap</div>
+                        <div class="option-item">🍲 Lentil and vegetable curry</div>
                     </div>
-                    <div class="d-flex justify-content-between">
-                        <span>Snacks:</span>
-                        <span class="text-muted">{{ diet_plan.meal_timing.snacks }}</span>
+                </div>
+            </div>
+
+            <div class="meal-card dinner">
+                <div class="meal-header">
+                    <div class="meal-title">
+                        <i class="fas fa-moon meal-icon"></i>
+                        Dinner
+                        <span class="calories-badge">800 cal</span>
+                    </div>
+                </div>
+                <div class="meal-content">
+                    <p class="meal-suggestion">
+                        🐟 Baked cod with sweet potato and steamed broccoli
+                    </p>
+                    <button class="options-toggle" onclick="toggleOptions(this)">
+                        <i class="fas fa-chevron-down"></i> More Dinner Options
+                    </button>
+                    <div class="options-list">
+                        <div class="option-item">🥩 Lean beef stir-fry with brown rice</div>
+                        <div class="option-item">🍝 Whole grain pasta with turkey meatballs</div>
+                        <div class="option-item">🌮 Black bean and veggie tacos</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="meal-card snacks">
+                <div class="meal-header">
+                    <div class="meal-title">
+                        <i class="fas fa-cookie-bite meal-icon"></i>
+                        Snacks
+                        <span class="calories-badge">300 cal</span>
+                    </div>
+                </div>
+                <div class="meal-content">
+                    <p class="meal-suggestion">
+                        🥜 Mixed nuts and protein shake
+                    </p>
+                    <button class="options-toggle" onclick="toggleOptions(this)">
+                        <i class="fas fa-chevron-down"></i> More Snack Options
+                    </button>
+                    <div class="options-list">
+                        <div class="option-item">🍎 Apple slices with almond butter</div>
+                        <div class="option-item">🧀 Greek yogurt with honey</div>
+                        <div class="option-item">🥕 Veggie sticks with hummus</div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    {% endif %}
 
-    <!-- Update Goals Form -->
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">
-                        <i class="fas fa-user-cog me-2"></i>Update Your Goals
-                    </h5>
+        <!-- Sidebar Info -->
+        <div class="sidebar">
+            <div class="info-card">
+                <h3 class="info-title">
+                    <i class="fas fa-lightbulb"></i>
+                    Power-Up Tips
+                </h3>
+                <div class="tip-item">
+                    <i class="fas fa-check"></i>
+                    <span>Eat protein within 30 minutes post-workout</span>
                 </div>
-                <div class="card-body">
-                    <form method="POST" action="{{ url_for('diet.update_goals') }}">
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label for="age" class="form-label">Age</label>
-                                <input type="number" class="form-control" id="age" name="age" 
-                                       value="{{ session.get('age', 18) }}" min="13" max="100" required>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="weight" class="form-label">Weight (kg)</label>
-                                <input type="number" class="form-control" id="weight" name="weight" 
-                                       value="{{ session.get('weight', 70) }}" min="30" max="200" step="0.1" required>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="fitness_goal" class="form-label">Fitness Goal</label>
-                                <select class="form-select" id="fitness_goal" name="fitness_goal" required>
-                                    <option value="weight_loss" {% if session.get('fitness_goal') == 'weight_loss' %}selected{% endif %}>
-                                        Weight Loss
-                                    </option>
-                                    <option value="muscle_gain" {% if session.get('fitness_goal') == 'muscle_gain' %}selected{% endif %}>
-                                        Muscle Gain
-                                    </option>
-                                    <option value="maintenance" {% if session.get('fitness_goal') == 'maintenance' %}selected{% endif %}>
-                                        Maintenance
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-sync me-1"></i>Update Diet Plan
-                                </button>
-                                <button type="button" class="btn btn-outline-secondary ms-2" onclick="generateNewPlan()">
-                                    <i class="fas fa-random me-1"></i>Generate New Plan
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                <div class="tip-item">
+                    <i class="fas fa-check"></i>
+                    <span>Include colorful vegetables in every meal</span>
+                </div>
+                <div class="tip-item">
+                    <i class="fas fa-check"></i>
+                    <span>Prep meals in advance for consistency</span>
+                </div>
+                <div class="tip-item">
+                    <i class="fas fa-check"></i>
+                    <span>Listen to your hunger and fullness cues</span>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h3 class="info-title">
+                    <i class="fas fa-tint"></i>
+                    Hydration Station
+                </h3>
+                <div class="hydration-display">
+                    <i class="fas fa-glass-water hydration-icon"></i>
+                    <div class="water-amount">3.2L</div>
+                    <p>Daily water target reached!</p>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h3 class="info-title">
+                    <i class="fas fa-clock"></i>
+                    Meal Timing
+                </h3>
+                <div class="timing-item">
+                    <span>🌅 Breakfast:</span>
+                    <span>7:00 - 8:00 AM</span>
+                </div>
+                <div class="timing-item">
+                    <span>☀️ Lunch:</span>
+                    <span>12:00 - 1:00 PM</span>
+                </div>
+                <div class="timing-item">
+                    <span>🌙 Dinner:</span>
+                    <span>6:00 - 7:00 PM</span>
+                </div>
+                <div class="timing-item">
+                    <span>🍪 Snacks:</span>
+                    <span>Between meals</span>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-{% endblock %}
 
-{% block scripts %}
-<script>
-function generateNewPlan() {
-    fetch('/diet/generate_plan')
-        .then(response => response.json())
-        .then(data => {
-            location.reload();
-        })
-        .catch(error => {
-            console.error('Error:', error);
+        <!-- Update Form -->
+        <div class="update-form">
+            <h3 class="form-title">
+                <i class="fas fa-user-cog"></i>
+                Level Up Your Goals
+            </h3>
+            <form onsubmit="updateGoals(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Age</label>
+                        <input type="number" class="form-control" value="25" min="13" max="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Weight (kg)</label>
+                        <input type="number" class="form-control" value="75" min="30" max="200" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Fitness Goal</label>
+                        <select class="form-control" required>
+                            <option value="weight_loss">🎯 Weight Loss</option>
+                            <option value="muscle_gain" selected>💪 Muscle Gain</option>
+                            <option value="maintenance">⚖️ Maintenance</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-rocket"></i>
+                        Update Diet Plan
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="generateNewPlan()">
+                        <i class="fas fa-dice"></i>
+                        Generate New Plan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleOptions(button) {
+            const optionsList = button.nextElementSibling;
+            const icon = button.querySelector('i');
+            
+            optionsList.classList.toggle('active');
+            icon.style.transform = optionsList.classList.contains('active') 
+                ? 'rotate(180deg)' 
+                : 'rotate(0deg)';
+        }
+
+        function updateGoals(event) {
+            event.preventDefault();
+            
+            // Add loading animation
+            const button = event.target.querySelector('button[type="submit"]');
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+            button.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                button.innerHTML = '<i class="fas fa-check"></i> Updated!';
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                }, 1000);
+            }, 2000);
+        }
+
+        function generateNewPlan() {
+            // Add sparkle effect
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-sparkles"></i> Generating Magic...';
+            button.disabled = true;
+            
+            // Simulate new plan generation
+            setTimeout(() => {
+                button.innerHTML = '<i class="fas fa-magic"></i> Plan Generated!';
+                
+                // Add celebration effect
+                createConfetti();
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                    // Refresh meal suggestions with animation
+                    refreshMealSuggestions();
+                }, 1500);
+            }, 2500);
+        }
+
+        function createConfetti() {
+            const colors = ['#ff9500', '#34c759', '#5856d6', '#ff3b30'];
+            const confettiCount = 50;
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-10px';
+                confetti.style.width = Math.random() * 10 + 5 + 'px';
+                confetti.style.height = confetti.style.width;
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.borderRadius = '50%';
+                confetti.style.pointerEvents = 'none';
+                confetti.style.zIndex = '1000';
+                confetti.style.animation = `confettiFall ${Math.random() * 3 + 2}s linear forwards`;
+                
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+
+        function refreshMealSuggestions() {
+            const suggestions = [
+                {
+                    meal: 'breakfast',
+                    options: [
+                        '🥞 Protein pancakes with Greek yogurt and mixed berries',
+                        '🍳 Veggie scramble with whole grain toast',
+                        '🥣 Quinoa breakfast bowl with nuts and fruit',
+                        '🥤 Green goddess smoothie with spinach and mango'
+                    ]
+                },
+                {
+                    meal: 'lunch', 
+                    options: [
+                        '🍗 Grilled chicken quinoa bowl with roasted vegetables',
+                        '🐟 Salmon poke bowl with brown rice',
+                        '🥗 Mediterranean chickpea salad',
+                        '🌯 Buffalo chicken lettuce wraps'
+                    ]
+                },
+                {
+                    meal: 'dinner',
+                    options: [
+                        '🐟 Baked cod with sweet potato and steamed broccoli',
+                        '🥩 Grass-fed beef with roasted Brussels sprouts',
+                        '🍝 Zucchini noodles with turkey bolognese',
+                        '🌮 Fish tacos with cabbage slaw'
+                    ]
+                },
+                {
+                    meal: 'snacks',
+                    options: [
+                        '🥜 Mixed nuts and protein shake',
+                        '🍎 Apple slices with almond butter',
+                        '🥒 Cucumber rolls with cream cheese',
+                        '🍓 Berry protein smoothie'
+                    ]
+                }
+            ];
+
+            suggestions.forEach(mealType => {
+                const mealCard = document.querySelector(`.meal-card.${mealType.meal}`);
+                const suggestion = mealCard.querySelector('.meal-suggestion');
+                const randomOption = mealType.options[Math.floor(Math.random() * mealType.options.length)];
+                
+                // Animate text change
+                suggestion.style.opacity = '0';
+                suggestion.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    suggestion.textContent = randomOption;
+                    suggestion.style.opacity = '1';
+                    suggestion.style.transform = 'translateY(0)';
+                }, 300);
+            });
+        }
+
+        // Add custom CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes confettiFall {
+                to {
+                    transform: translateY(100vh) rotate(720deg);
+                    opacity: 0;
+                }
+            }
+            
+            .meal-suggestion {
+                transition: all 0.3s ease;
+            }
+            
+            /* Add pulse animation for active elements */
+            .stat-card:hover .stat-icon {
+                animation: pulse 0.5s ease-in-out;
+            }
+            
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.1); }
+                100% { transform: scale(1); }
+            }
+            
+            /* Add glow effect for buttons */
+            .btn-primary:active {
+                box-shadow: 0 0 20px rgba(102, 126, 234, 0.6);
+                transform: translateY(-3px) scale(0.98);
+            }
+            
+            /* Add floating animation for meal icons */
+            .meal-icon:hover {
+                animation: bounce 0.6s ease-in-out;
+            }
+            
+            @keyframes bounce {
+                0%, 100% { transform: translateY(0); }
+                25% { transform: translateY(-10px); }
+                50% { transform: translateY(-5px); }
+                75% { transform: translateY(-8px); }
+            }
+            
+            /* Add shimmer effect for calories badges */
+            .calories-badge {
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .calories-badge::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+                transition: left 0.5s;
+            }
+            
+            .meal-card:hover .calories-badge::before {
+                left: 100%;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Add interactive hover effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add parallax effect to particles
+            document.addEventListener('mousemove', function(e) {
+                const particles = document.querySelectorAll('.particle');
+                const mouseX = e.clientX / window.innerWidth;
+                const mouseY = e.clientY / window.innerHeight;
+                
+                particles.forEach((particle, index) => {
+                    const speed = (index + 1) * 0.05;
+                    const x = (mouseX - 0.5) * speed * 50;
+                    const y = (mouseY - 0.5) * speed * 50;
+                    particle.style.transform += ` translate(${x}px, ${y}px)`;
+                });
+            });
+            
+            // Add sound effect simulation (visual feedback)
+            const buttons = document.querySelectorAll('.btn, .options-toggle');
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    this.style.transform += ' scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = this.style.transform.replace(' scale(0.95)', '');
+                    }, 150);
+                });
+            });
+            
+            // Add progress bar animation for water intake
+            const waterAmount = document.querySelector('.water-amount');
+            let currentAmount = 0;
+            const targetAmount = 3.2;
+            const increment = targetAmount / 100;
+            
+            const animateWater = setInterval(() => {
+                currentAmount += increment;
+                if (currentAmount >= targetAmount) {
+                    currentAmount = targetAmount;
+                    clearInterval(animateWater);
+                }
+                waterAmount.textContent = currentAmount.toFixed(1) + 'L';
+            }, 50);
         });
-}
-</script>
+    </script>
 {% endblock %}

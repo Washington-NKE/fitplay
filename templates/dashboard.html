@@ -3,10 +3,412 @@
 {% block title %}Dashboard - FitPlay{% endblock %}
 
 {% block content %}
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap');
+
+:root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    --danger-gradient: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+    --info-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --warning-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+* {
+    font-family: 'Exo 2', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, .display-font {
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.container {
+    animation: slideInUp 0.8s ease-out;
+}
+
+@keyframes slideInUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes bounceIn {
+    0% {
+        transform: scale(0.3);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 5px rgba(255,255,255,0.2);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255,255,255,0.4), 0 0 30px rgba(255,255,255,0.2);
+    }
+    100% {
+        box-shadow: 0 0 5px rgba(255,255,255,0.2);
+    }
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes rainbow {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+}
+
+.stats-card {
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+    animation: bounceIn 0.6s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.stats-card:nth-child(1) .card { animation-delay: 0.1s; }
+.stats-card:nth-child(2) .card { animation-delay: 0.2s; }
+.stats-card:nth-child(3) .card { animation-delay: 0.3s; }
+.stats-card:nth-child(4) .card { animation-delay: 0.4s; }
+
+.stats-card:hover {
+    transform: translateY(-10px) scale(1.03);
+    animation: pulse 2s infinite, glow 2s infinite;
+}
+
+.stats-card.bg-primary {
+    background: var(--primary-gradient) !important;
+}
+
+.stats-card.bg-success {
+    background: var(--success-gradient) !important;
+}
+
+.stats-card.bg-danger {
+    background: var(--danger-gradient) !important;
+}
+
+.stats-card.bg-info {
+    background: var(--info-gradient) !important;
+}
+
+.stats-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.stats-card:hover::before {
+    left: 100%;
+}
+
+.stats-card i {
+    animation: float 3s ease-in-out infinite;
+}
+
+.stats-card:hover i {
+    animation: shake 0.5s ease-in-out, rainbow 2s linear infinite;
+}
+
+.card-title {
+    font-family: 'Orbitron', monospace;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.card h3 {
+    font-family: 'Orbitron', monospace;
+    font-weight: 900;
+    font-size: 2.2rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    animation: slideInUp 0.8s ease-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+.card-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-bottom: 2px solid #dee2e6;
+    font-family: 'Orbitron', monospace;
+}
+
+.card-header h5 {
+    color: #495057;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.progress {
+    height: 8px;
+    border-radius: 10px;
+    background-color: rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.progress-bar {
+    border-radius: 10px;
+    transition: width 2s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(
+        -45deg, 
+        rgba(255,255,255,0.2) 25%, 
+        transparent 25%, 
+        transparent 50%, 
+        rgba(255,255,255,0.2) 50%, 
+        rgba(255,255,255,0.2) 75%, 
+        transparent 75%, 
+        transparent
+    );
+    background-size: 30px 30px;
+    animation: progressStripes 1s linear infinite;
+}
+
+@keyframes progressStripes {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 30px 0;
+    }
+}
+
+.achievement-item {
+    padding: 15px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border-radius: 10px;
+    border-left: 4px solid #007bff;
+    transition: all 0.3s ease;
+}
+
+.achievement-item:hover {
+    transform: translateX(10px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    background: linear-gradient(135deg, #ffffff 0%, #f1f3f4 100%);
+}
+
+.table {
+    font-family: 'Exo 2', sans-serif;
+}
+
+.table th {
+    font-family: 'Orbitron', monospace;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    color: #495057;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table-hover tbody tr:hover {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    transform: scale(1.02);
+    transition: all 0.2s ease;
+}
+
+.badge {
+    font-family: 'Orbitron', monospace;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+}
+
+.badge:hover {
+    transform: scale(1.1);
+    animation: pulse 1s infinite;
+}
+
+.btn {
+    font-family: 'Orbitron', monospace;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 25px;
+    padding: 12px 25px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    animation: glow 1s infinite;
+}
+
+.btn-primary {
+    background: var(--primary-gradient);
+    border: none;
+}
+
+.text-center .fa-running {
+    animation: float 3s ease-in-out infinite;
+    color: #6c757d;
+}
+
+.text-center:hover .fa-running {
+    animation: shake 0.5s ease-in-out, rainbow 2s linear infinite;
+}
+
+/* Loading animation for stats */
+@keyframes countUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#total-points, #total-workouts, #total-calories, #total-time {
+    animation: countUp 1s ease-out;
+}
+
+/* Staggered animations */
+.col-md-3:nth-child(1) { animation-delay: 0.1s; }
+.col-md-3:nth-child(2) { animation-delay: 0.2s; }
+.col-md-3:nth-child(3) { animation-delay: 0.3s; }
+.col-md-3:nth-child(4) { animation-delay: 0.4s; }
+
+.col-md-8, .col-md-4 {
+    animation: slideInUp 0.8s ease-out;
+}
+
+.col-md-8 { animation-delay: 0.5s; }
+.col-md-4 { animation-delay: 0.6s; }
+
+.col-12:last-child {
+    animation: slideInUp 0.8s ease-out;
+    animation-delay: 0.7s;
+}
+
+/* Hover effect for dashboard title */
+h2 {
+    background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 4s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Special effects for icons */
+.fas.fa-chart-line {
+    animation: float 2s ease-in-out infinite;
+}
+
+.fas.fa-chart-bar, .fas.fa-trophy, .fas.fa-history {
+    transition: all 0.3s ease;
+}
+
+.card-header:hover .fas {
+    animation: shake 0.5s ease-in-out;
+    color: #007bff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .stats-card:hover {
+        transform: translateY(-5px) scale(1.02);
+    }
+    
+    .card h3 {
+        font-size: 1.8rem;
+    }
+}
+</style>
+
 <div class="container mt-5">
     <div class="row">
         <div class="col-12">
-            <h2 class="mb-4">
+            <h2 class="mb-4 display-font">
                 <i class="fas fa-chart-line me-2"></i>Fitness Dashboard
             </h2>
         </div>
@@ -20,7 +422,7 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <h6 class="card-title">Total Points</h6>
-                            <h3 class="mb-0" id="total-points">{{ current_user.points }}</h3>
+                            <h3 class="mb-0" id="total-points">{{ current_user['points'] or 0 }}</h3>
                         </div>
                         <div class="align-self-center">
                             <i class="fas fa-star fa-2x opacity-75"></i>
@@ -35,7 +437,7 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <h6 class="card-title">Workouts</h6>
-                            <h3 class="mb-0" id="total-workouts">{{ current_user.workouts_completed }}</h3>
+                            <h3 class="mb-0" id="total-workouts">{{ current_user['workouts_completed'] or 0 }}</h3>
                         </div>
                         <div class="align-self-center">
                             <i class="fas fa-dumbbell fa-2x opacity-75"></i>
@@ -50,7 +452,7 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <h6 class="card-title">Calories</h6>
-                            <h3 class="mb-0" id="total-calories">{{ current_user.calories_burned }}</h3>
+                            <h3 class="mb-0" id="total-calories">{{ current_user['calories_burned'] or 0 }}</h3>
                         </div>
                         <div class="align-self-center">
                             <i class="fas fa-fire fa-2x opacity-75"></i>
@@ -65,7 +467,7 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <h6 class="card-title">Time Active</h6>
-                            <h3 class="mb-0" id="total-time">{{ "%.1f"|format(current_user.time_active) }}min</h3>
+                            <h3 class="mb-0" id="total-time">{{ "%.1f"|format(current_user['time_active'] or 0) }}min</h3>
                         </div>
                         <div class="align-self-center">
                             <i class="fas fa-clock fa-2x opacity-75"></i>
@@ -101,28 +503,31 @@
                     <div class="achievement-item mb-3">
                         <div class="d-flex justify-content-between mb-1">
                             <span>Workout Streak</span>
-                            <span class="text-muted">{{ current_user.workouts_completed }}/7</span>
+                            <span class="text-muted">{{ current_user['workouts_completed'] or 0 }}/7</span>
                         </div>
                         <div class="progress">
-                            <div class="progress-bar bg-success" style="width: {{ (current_user.workouts_completed / 7 * 100) if current_user.workouts_completed < 7 else 100 }}%"></div>
+                            {% set workouts = current_user['workouts_completed'] or 0 %}
+                            <div class="progress-bar bg-success" style="width: {{ (workouts / 7 * 100) if workouts < 7 else 100 }}%"></div>
                         </div>
                     </div>
                     <div class="achievement-item mb-3">
                         <div class="d-flex justify-content-between mb-1">
                             <span>Calorie Burner</span>
-                            <span class="text-muted">{{ current_user.calories_burned }}/1000</span>
+                            <span class="text-muted">{{ current_user['calories_burned'] or 0 }}/1000</span>
                         </div>
                         <div class="progress">
-                            <div class="progress-bar bg-danger" style="width: {{ (current_user.calories_burned / 1000 * 100) if current_user.calories_burned < 1000 else 100 }}%"></div>
+                            {% set calories = current_user['calories_burned'] or 0 %}
+                            <div class="progress-bar bg-danger" style="width: {{ (calories / 1000 * 100) if calories < 1000 else 100 }}%"></div>
                         </div>
                     </div>
                     <div class="achievement-item mb-3">
                         <div class="d-flex justify-content-between mb-1">
                             <span>Time Warrior</span>
-                            <span class="text-muted">{{ "%.1f"|format(current_user.time_active) }}/60min</span>
+                            <span class="text-muted">{{ "%.1f"|format(current_user['time_active'] or 0) }}/60min</span>
                         </div>
                         <div class="progress">
-                            <div class="progress-bar bg-info" style="width: {{ (current_user.time_active / 60 * 100) if current_user.time_active < 60 else 100 }}%"></div>
+                            {% set time_active = current_user['time_active'] or 0 %}
+                            <div class="progress-bar bg-info" style="width: {{ (time_active / 60 * 100) if time_active < 60 else 100 }}%"></div>
                         </div>
                     </div>
                 </div>
@@ -157,20 +562,20 @@
                                 <tr>
                                     <td>
                                         <i class="fas fa-gamepad me-2 text-primary"></i>
-                                        {{ activity.type }}
+                                        {{ activity.type if activity.type is defined else activity['type'] }}
                                     </td>
                                     <td>
                                         <span class="badge bg-warning text-dark">
-                                            +{{ activity.points }}
+                                            +{{ activity.points if activity.points is defined else activity['points'] }}
                                         </span>
                                     </td>
                                     <td>
                                         <span class="badge bg-danger">
-                                            {{ activity.calories }} cal
+                                            {{ activity.calories if activity.calories is defined else activity['calories'] }} cal
                                         </span>
                                     </td>
-                                    <td>{{ activity.duration }}min</td>
-                                    <td class="text-muted">{{ activity.timestamp }}</td>
+                                    <td>{{ activity.duration if activity.duration is defined else activity['duration'] }}min</td>
+                                    <td class="text-muted">{{ activity.timestamp if activity.timestamp is defined else activity['timestamp'] }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -190,6 +595,66 @@
         </div>
     </div>
 </div>
+
+<script>
+// Add some interactive JavaScript animations
+document.addEventListener('DOMContentLoaded', function() {
+    // Animate numbers counting up
+    const animateValue = (element, start, end, duration) => {
+        let startTimestamp = null;
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            const currentValue = Math.floor(progress * (end - start) + start);
+            element.textContent = currentValue;
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            }
+        };
+        window.requestAnimationFrame(step);
+    };
+
+    // Animate stat numbers
+    const totalPoints = document.getElementById('total-points');
+    const totalWorkouts = document.getElementById('total-workouts');
+    const totalCalories = document.getElementById('total-calories');
+    const totalTime = document.getElementById('total-time');
+
+    if (totalPoints) {
+        const pointsValue = parseInt(totalPoints.textContent) || 0;
+        animateValue(totalPoints, 0, pointsValue, 1500);
+    }
+
+    if (totalWorkouts) {
+        const workoutsValue = parseInt(totalWorkouts.textContent) || 0;
+        animateValue(totalWorkouts, 0, workoutsValue, 1200);
+    }
+
+    if (totalCalories) {
+        const caloriesValue = parseInt(totalCalories.textContent) || 0;
+        animateValue(totalCalories, 0, caloriesValue, 1800);
+    }
+
+    // Add click effects to stats cards
+    document.querySelectorAll('.stats-card').forEach(card => {
+        card.addEventListener('click', function() {
+            this.style.animation = 'none';
+            setTimeout(() => {
+                this.style.animation = 'bounceIn 0.6s ease-out';
+            }, 10);
+        });
+    });
+
+    // Add sparkle effect to achievement items when they're near completion
+    document.querySelectorAll('.progress-bar').forEach(bar => {
+        const width = parseFloat(bar.style.width);
+        if (width > 80) {
+            bar.style.animation = 'glow 2s infinite';
+        }
+    });
+});
+</script>
+
 {% endblock %}
 
 {% block scripts %}

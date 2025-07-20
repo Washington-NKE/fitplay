@@ -3,179 +3,555 @@
 {% block title %}Profile - FitPlay{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-12">
-            <h2 class="mb-4">
-                <i class="fas fa-user me-2"></i>Your Profile
-            </h2>
-        </div>
-    </div>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Nunito:wght@400;600;700;800&display=swap');
+    
+    * {
+        font-family: 'Nunito', sans-serif !important;
+    }
+    
+    h1, h2, h3, h4, h5, h6, .fun-title {
+        font-family: 'Fredoka One', cursive !important;
+        color: #6366f1;
+    }
+    
+    .profile-container {
+        padding-top: 100px;
+        animation: slideInUp 0.8s ease-out;
+    }
+    
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes bounceIn {
+        0% {
+            opacity: 0;
+            transform: scale(0.3);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+        70% {
+            transform: scale(0.9);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+    
+    @keyframes wiggle {
+        0%, 100% {
+            transform: rotate(0deg);
+        }
+        25% {
+            transform: rotate(-3deg);
+        }
+        75% {
+            transform: rotate(3deg);
+        }
+    }
+    
+    @keyframes sparkle {
+        0%, 100% {
+            opacity: 0;
+            transform: scale(0.5) rotate(0deg);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1) rotate(180deg);
+        }
+    }
+    
+    .profile-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 20px;
+        border: none;
+        color: white;
+        animation: bounceIn 1s ease-out 0.2s both;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .profile-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+        transform: rotate(45deg);
+        transition: all 0.5s;
+        opacity: 0;
+    }
+    
+    .profile-card:hover::before {
+        animation: shimmer 1.5s infinite;
+    }
+    
+    @keyframes shimmer {
+        0% {
+            transform: translateX(-100%) translateY(-100%) rotate(45deg);
+        }
+        100% {
+            transform: translateX(100%) translateY(100%) rotate(45deg);
+        }
+    }
+    
+    .stats-card {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        border-radius: 20px;
+        border: none;
+        color: white;
+        animation: bounceIn 1s ease-out 0.4s both;
+        transition: transform 0.3s ease;
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(240, 147, 251, 0.3);
+    }
+    
+    .settings-card {
+        border-radius: 20px;
+        border: none;
+        background: white;
+        animation: bounceIn 1s ease-out 0.6s both;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+    
+    .settings-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    }
+    
+    .achievements-card {
+        border-radius: 20px;
+        border: none;
+        background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        animation: bounceIn 1s ease-out 0.8s both;
+        transition: transform 0.3s ease;
+    }
+    
+    .achievements-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 25px 50px rgba(252, 182, 159, 0.3);
+    }
+    
+    .user-icon {
+        animation: pulse 2s infinite;
+        color: white !important;
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+    
+    .level-badge {
+        animation: wiggle 2s ease-in-out infinite;
+        background: linear-gradient(45deg, #FFD700, #FFA500) !important;
+        border: 3px solid #FFFF00;
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        position: relative;
+    }
+    
+    .level-badge::after {
+        content: '✨';
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        animation: sparkle 2s infinite;
+        font-size: 12px;
+    }
+    
+    .progress {
+        background: rgba(255, 255, 255, 0.2) !important;
+        border-radius: 50px;
+        overflow: hidden;
+    }
+    
+    .progress-bar {
+        background: linear-gradient(90deg, #FFD700, #FFFF00, #FFD700) !important;
+        border-radius: 50px;
+        position: relative;
+        animation: progressFill 2s ease-out;
+    }
+    
+    @keyframes progressFill {
+        from {
+            width: 0%;
+        }
+    }
+    
+    .progress-bar::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+        animation: progressShine 2s infinite;
+    }
+    
+    @keyframes progressShine {
+        0% {
+            transform: translateX(-100%);
+        }
+        100% {
+            transform: translateX(100%);
+        }
+    }
+    
+    .stat-number {
+        font-family: 'Fredoka One', cursive !important;
+        font-size: 2.5rem !important;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        animation: countUp 2s ease-out;
+    }
+    
+    @keyframes countUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .form-control {
+        border-radius: 15px;
+        border: 2px solid #e0e7ff;
+        transition: all 0.3s ease;
+        font-weight: 600;
+    }
+    
+    .form-control:focus {
+        border-color: #6366f1;
+        box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
+        transform: scale(1.02);
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 15px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.3s ease, height 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+    }
+    
+    .btn-primary:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+    
+    .badge-item {
+        animation: bounceIn 1s ease-out both;
+        transition: transform 0.3s ease;
+    }
+    
+    .badge-item:hover {
+        transform: scale(1.1) rotate(5deg);
+    }
+    
+    .badge-item:nth-child(1) { animation-delay: 0.1s; }
+    .badge-item:nth-child(2) { animation-delay: 0.2s; }
+    .badge-item:nth-child(3) { animation-delay: 0.3s; }
+    .badge-item:nth-child(4) { animation-delay: 0.4s; }
+    .badge-item:nth-child(5) { animation-delay: 0.5s; }
+    .badge-item:nth-child(6) { animation-delay: 0.6s; }
+    
+    .medal-icon {
+        color: #FFD700;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+    }
+    
+    .no-badges {
+        animation: float 3s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+    
+    .card-header {
+        background: transparent !important;
+        border-bottom: 2px solid #f0f0f0 !important;
+        border-radius: 20px 20px 0 0 !important;
+    }
+    
+    .card-title {
+        color: #6366f1 !important;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .text-muted {
+        color: rgba(255, 255, 255, 0.8) !important;
+        font-weight: 600;
+    }
+    
+    .settings-card .text-muted {
+        color: #6b7280 !important;
+    }
+    
+    .achievements-card .text-muted {
+        color: #8b5cf6 !important;
+    }
+    
+    /* Floating particles animation */
+    .floating-particles {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+    }
+    
+    .particle {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        animation: floatParticle 6s infinite linear;
+    }
+    
+    @keyframes floatParticle {
+        0% {
+            transform: translateY(100vh) rotate(0deg);
+            opacity: 0;
+        }
+        10% {
+            opacity: 1;
+        }
+        90% {
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(-100px) rotate(360deg);
+            opacity: 0;
+        }
+    }
+</style>
 
+<div class="floating-particles">
+    <div class="particle" style="left: 10%; width: 4px; height: 4px; animation-delay: 0s;"></div>
+    <div class="particle" style="left: 20%; width: 2px; height: 2px; animation-delay: 1s;"></div>
+    <div class="particle" style="left: 30%; width: 3px; height: 3px; animation-delay: 2s;"></div>
+    <div class="particle" style="left: 40%; width: 2px; height: 2px; animation-delay: 3s;"></div>
+    <div class="particle" style="left: 50%; width: 4px; height: 4px; animation-delay: 4s;"></div>
+    <div class="particle" style="left: 60%; width: 3px; height: 3px; animation-delay: 5s;"></div>
+    <div class="particle" style="left: 70%; width: 2px; height: 2px; animation-delay: 0.5s;"></div>
+    <div class="particle" style="left: 80%; width: 4px; height: 4px; animation-delay: 1.5s;"></div>
+    <div class="particle" style="left: 90%; width: 2px; height: 2px; animation-delay: 2.5s;"></div>
+</div>
+
+<div class="container profile-container">
     <div class="row">
-        <!-- Profile Information -->
+        <div class="col-md-4">
+            <div class="card shadow profile-card">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-user-circle fa-5x user-icon"></i>
+                    </div>
+                    <h4 class="fun-title" style="color: white;">{{ user.username }}</h4>
+                    <p class="text-muted">{{ user.email }}</p>
+                    <div class="badge level-badge fs-6 mb-2">Level {{ user.profile.level }}</div>
+                    
+                    <div class="mb-3">
+                        <div class="progress" style="height: 15px;">
+                            <div class="progress-bar" style="width: {{ (user.profile.xp % 1000) / 10 }}%"></div>
+                        </div>
+                        <small class="text-muted">{{ user.profile.xp % 1000 }}/1000 XP to next level</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card shadow stats-card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title text-center" style="color: white;">🎯 Stats</h5>
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <div class="border-end">
+                                <h4 class="stat-number" style="color: white;">{{ user.profile.total_workouts }}</h4>
+                                <small class="text-muted">💪 Workouts</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <h4 class="stat-number" style="color: white;">{{ user.profile.streak }}</h4>
+                            <small class="text-muted">🔥 Day Streak</small>
+                        </div>
+                    </div>
+                    <hr style="border-color: rgba(255, 255, 255, 0.3);">
+                    <div class="text-center">
+                        <h4 class="stat-number" style="color: white;">{{ user.profile.daily_usage }}</h4>
+                        <small class="text-muted">⏱️ Minutes Today</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <div class="col-md-8">
-            <div class="card">
+            <div class="card shadow settings-card">
                 <div class="card-header">
-                    <h5 class="mb-0">
-                        <i class="fas fa-user-cog me-2"></i>Profile Information
+                    <h5 class="mb-0 card-title">
+                        <i class="fas fa-cog me-2"></i>Profile Settings
                     </h5>
                 </div>
                 <div class="card-body">
-                    <form method="POST">
+                    <form method="POST" action="{{ url_for('auth.update_profile') }}">
+                        <div class="mb-3">
+                            <label for="username" class="form-label fw-bold">👤 Username</label>
+                            <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}">
+                        </div>
+                        
                         <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="username" class="form-label">Username</label>
-                                <input type="text" class="form-control" id="username" name="username" 
-                                       value="{{ current_user.username }}" required>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="calorie_goal" class="form-label fw-bold">🍎 Daily Calorie Goal</label>
+                                    <input type="number" class="form-control" id="calorie_goal" name="calorie_goal" 
+                                           value="{{ user.diet.calorie_goal }}" min="1000" max="5000">
+                                </div>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="age" class="form-label">Age</label>
-                                <input type="number" class="form-control" id="age" name="age" 
-                                       value="{{ session.get('age', 18) }}" min="13" max="100" required>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="step_goal" class="form-label fw-bold">👟 Daily Step Goal</label>
+                                    <input type="number" class="form-control" id="step_goal" name="step_goal" 
+                                           value="{{ user.games.step_counter.step_goal }}" min="1000" max="50000">
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="weight" class="form-label">Weight (kg)</label>
-                                <input type="number" class="form-control" id="weight" name="weight" 
-                                       value="{{ session.get('weight', 70) }}" min="30" max="200" step="0.1" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="fitness_goal" class="form-label">Fitness Goal</label>
-                                <select class="form-select" id="fitness_goal" name="fitness_goal" required>
-                                    <option value="weight_loss" {% if session.get('fitness_goal') == 'weight_loss' %}selected{% endif %}>
-                                        Weight Loss
-                                    </option>
-                                    <option value="muscle_gain" {% if session.get('fitness_goal') == 'muscle_gain' %}selected{% endif %}>
-                                        Muscle Gain
-                                    </option>
-                                    <option value="maintenance" {% if session.get('fitness_goal') == 'maintenance' %}selected{% endif %}>
-                                        Maintenance
-                                    </option>
-                                </select>
-                            </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save me-2"></i>Update Profile
+                            </button>
                         </div>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save me-1"></i>Update Profile
-                        </button>
                     </form>
                 </div>
             </div>
-        </div>
-
-        <!-- Profile Stats -->
-        <div class="col-md-4">
-            <div class="card">
+            
+            <div class="card shadow achievements-card mt-4">
                 <div class="card-header">
-                    <h5 class="mb-0">
-                        <i class="fas fa-chart-bar me-2"></i>Your Stats
-                    </h5>
-                </div>
-                <div class="card-body text-center">
-                    <div class="stat-item mb-3">
-                        <i class="fas fa-star fa-2x text-warning mb-2"></i>
-                        <h4>{{ current_user.points }}</h4>
-                        <p class="text-muted">Total Points</p>
-                    </div>
-                    <div class="stat-item mb-3">
-                        <i class="fas fa-dumbbell fa-2x text-success mb-2"></i>
-                        <h4>{{ current_user.workouts_completed }}</h4>
-                        <p class="text-muted">Workouts Completed</p>
-                    </div>
-                    <div class="stat-item mb-3">
-                        <i class="fas fa-fire fa-2x text-danger mb-2"></i>
-                        <h4>{{ current_user.calories_burned }}</h4>
-                        <p class="text-muted">Calories Burned</p>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fas fa-clock fa-2x text-info mb-2"></i>
-                        <h4>{{ "%.1f"|format(current_user.time_active) }}min</h4>
-                        <p class="text-muted">Time Active</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Badges Section -->
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">
-                        <i class="fas fa-medal me-2"></i>Your Badges
+                    <h5 class="mb-0 card-title">
+                        <i class="fas fa-trophy me-2"></i>Achievements
                     </h5>
                 </div>
                 <div class="card-body">
-                    {% if current_user.badges %}
-                    <div class="row">
-                        {% for badge in current_user.badges %}
-                        <div class="col-md-3 mb-3">
-                            <div class="badge-card text-center">
-                                <div class="badge-icon">
-                                    <i class="fas fa-trophy fa-3x text-warning"></i>
+                    {% if user.profile.badges %}
+                        <div class="row">
+                            {% for badge in user.profile.badges %}
+                                <div class="col-md-4 mb-3 badge-item">
+                                    <div class="text-center">
+                                        <i class="fas fa-medal fa-2x medal-icon"></i>
+                                        <p class="mt-2 mb-0 fw-bold">{{ badge }}</p>
+                                    </div>
                                 </div>
-                                <h6 class="mt-2">{{ badge.replace('_', ' ').title() }}</h6>
-                                <small class="text-muted">Earned this badge!</small>
-                            </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
-                    </div>
                     {% else %}
-                    <div class="text-center py-4">
-                        <i class="fas fa-medal fa-3x text-muted mb-3"></i>
-                        <p class="text-muted">No badges earned yet. Start playing games to earn your first badge!</p>
-                        <a href="{{ url_for('games.games') }}" class="btn btn-primary">
-                            <i class="fas fa-play me-1"></i>Play Games
-                        </a>
-                    </div>
+                        <div class="text-center text-muted no-badges">
+                            <i class="fas fa-medal fa-3x mb-3" style="color: #d1d5db;"></i>
+                            <p class="fw-bold">🌟 No badges earned yet! 🌟</p>
+                            <p>Complete workouts and games to earn amazing achievements!</p>
+                        </div>
                     {% endif %}
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Daily Usage -->
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">
-                        <i class="fas fa-clock me-2"></i>Daily Usage
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <p class="mb-2">Today's Usage: <strong>{{ current_user.daily_usage }} minutes</strong></p>
-                            <div class="progress mb-3">
-                                <div class="progress-bar" role="progressbar" 
-                                     style="width: {{ (current_user.daily_usage / 120) * 100 }}%"
-                                     aria-valuenow="{{ current_user.daily_usage }}" 
-                                     aria-valuemin="0" 
-                                     aria-valuemax="120">
-                                </div>
-                            </div>
-                            <small class="text-muted">Daily limit: 120 minutes (2 hours)</small>
-                        </div>
-                        <div class="col-md-4 text-center">
-                            {% if current_user.daily_usage < 120 %}
-                            <div class="usage-status text-success">
-                                <i class="fas fa-check-circle fa-2x mb-2"></i>
-                                <p>Good to go!</p>
-                            </div>
-                            {% else %}
-                            <div class="usage-status text-warning">
-                                <i class="fas fa-exclamation-triangle fa-2x mb-2"></i>
-                                <p>Daily limit reached</p>
-                            </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
+
+<script>
+    // Add some interactive sparkle effects
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add hover effects to stats
+        const statNumbers = document.querySelectorAll('.stat-number');
+        statNumbers.forEach(stat => {
+            stat.addEventListener('mouseenter', function() {
+                this.style.animation = 'pulse 0.5s ease-in-out';
+            });
+            
+            stat.addEventListener('animationend', function() {
+                this.style.animation = '';
+            });
+        });
+        
+        // Add click animation to the level badge
+        const levelBadge = document.querySelector('.level-badge');
+        if (levelBadge) {
+            levelBadge.addEventListener('click', function() {
+                this.style.animation = 'wiggle 0.5s ease-in-out';
+                setTimeout(() => {
+                    this.style.animation = 'wiggle 2s ease-in-out infinite';
+                }, 500);
+            });
+        }
+        
+        // Add form input animations
+        const formInputs = document.querySelectorAll('.form-control');
+        formInputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+                this.parentElement.style.transition = 'transform 0.3s ease';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+    });
+</script>
 {% endblock %}

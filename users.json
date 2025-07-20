@@ -1,0 +1,72 @@
+{
+    "56442c03-4297-4895-b66d-df83ca84ab45": {
+        "id": "56442c03-4297-4895-b66d-df83ca84ab45",
+        "username": "Washington Mwangi",
+        "email": "washiem2022@gmail.com",
+        "created_at": "2025-07-19T14:32:20.823517",
+        "profile": {
+            "level": 1,
+            "xp": 0,
+            "total_workouts": 0,
+            "streak": 0,
+            "daily_usage": 0,
+            "badges": [],
+            "avatar": "default.png"
+        },
+        "games": {
+            "fitness_quest": {
+                "level": 1,
+                "score": 0,
+                "completed_challenges": []
+            },
+            "step_counter": {
+                "daily_steps": 0,
+                "total_steps": 0,
+                "step_goal": 10000
+            }
+        },
+        "diet": {
+            "daily_calories": 0,
+            "calorie_goal": 2000,
+            "meals": [],
+            "water_intake": 0
+        },
+        "workouts": [],
+        "password": "scrypt:32768:8:1$i3OlydKereM5DF1l$93a17c03245690aefc12746747f4dbcb8bbe18eb061e6dcf3a92172ea1ce901b243b13101bfa49c4c8f7be3020e2cafb6220bd16f6532659a66f114862aa2cef"
+    },
+    "a51ad80b-92ba-45a7-a9bf-b7b5887cf5dc": {
+        "id": "a51ad80b-92ba-45a7-a9bf-b7b5887cf5dc",
+        "username": "Risper",
+        "email": "risper@gmail.com",
+        "created_at": "2025-07-20T11:02:42.564751",
+        "profile": {
+            "level": 1,
+            "xp": 0,
+            "total_workouts": 0,
+            "streak": 0,
+            "daily_usage": 0,
+            "badges": [],
+            "avatar": "default.png"
+        },
+        "games": {
+            "fitness_quest": {
+                "level": 1,
+                "score": 0,
+                "completed_challenges": []
+            },
+            "step_counter": {
+                "daily_steps": 0,
+                "total_steps": 0,
+                "step_goal": 10000
+            }
+        },
+        "diet": {
+            "daily_calories": 0,
+            "calorie_goal": 2000,
+            "meals": [],
+            "water_intake": 0
+        },
+        "workouts": [],
+        "password": "scrypt:32768:8:1$g5iN3iXP6T2DywFo$b59c9397bb419f8020a63f546960c64d487f98e144196ff9e65ad41714916615adc9859889fa45afa24959d757bc135baebb126a0e228dd8986504b4daedaaf2"
+    }
+}

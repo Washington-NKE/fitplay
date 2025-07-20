@@ -1,0 +1,153 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "john_doe",
+      "email": "john@example.com",
+      "password_hash": "pbkdf2:sha256:260000$abc123$1234567890abcdef...",
+      "created_at": "2025-01-15T10:30:00Z",
+      "is_active": true,
+      "profile": {
+        "age": 28,
+        "weight": 75.5,
+        "height": 175,
+        "fitness_goal": "weight_loss",
+        "level": 5,
+        "xp": 4250,
+        "points": 1250,
+        "workouts_completed": 45,
+        "calories_burned": 12500,
+        "daily_usage": 65,
+        "streak": 7,
+        "total_workouts": 45,
+        "time_active": 2700,
+        "badges": ["first_workout", "calorie_burner", "time_warrior", "streak_master"],
+        "achievements": [
+          {
+            "id": "first_workout",
+            "name": "First Workout",
+            "description": "Completed your first workout",
+            "earned_at": "2025-01-15T11:00:00Z"
+          },
+          {
+            "id": "calorie_burner",
+            "name": "Calorie Burner",
+            "description": "Burned 1000+ calories",
+            "earned_at": "2025-01-20T15:30:00Z"
+          }
+        ],
+        "workout_history": [
+          {
+            "date": "2025-07-19",
+            "type": "cardio",
+            "duration": 30,
+            "calories": 250,
+            "points_earned": 50
+          },
+          {
+            "date": "2025-07-18",
+            "type": "strength",
+            "duration": 45,
+            "calories": 180,
+            "points_earned": 75
+          }
+        ]
+      }
+    },
+    {
+      "id": "2",
+      "username": "jane_smith",
+      "email": "jane@example.com",
+      "password_hash": "pbkdf2:sha256:260000$def456$abcdef1234567890...",
+      "created_at": "2025-01-10T14:20:00Z",
+      "is_active": true,
+      "profile": {
+        "age": 32,
+        "weight": 62.0,
+        "height": 168,
+        "fitness_goal": "muscle_gain",
+        "level": 8,
+        "xp": 7800,
+        "points": 2100,
+        "workouts_completed": 78,
+        "calories_burned": 18750,
+        "daily_usage": 90,
+        "streak": 15,
+        "total_workouts": 78,
+        "time_active": 4200,
+        "badges": ["first_workout", "calorie_burner", "time_warrior", "points_collector", "streak_master", "workout_warrior"],
+        "achievements": [
+          {
+            "id": "first_workout",
+            "name": "First Workout",
+            "description": "Completed your first workout",
+            "earned_at": "2025-01-10T15:00:00Z"
+          },
+          {
+            "id": "workout_warrior",
+            "name": "Workout Warrior",
+            "description": "Completed 50+ workouts",
+            "earned_at": "2025-02-15T12:00:00Z"
+          }
+        ],
+        "workout_history": [
+          {
+            "date": "2025-07-19",
+            "type": "strength",
+            "duration": 60,
+            "calories": 320,
+            "points_earned": 100
+          },
+          {
+            "date": "2025-07-18",
+            "type": "yoga",
+            "duration": 40,
+            "calories": 150,
+            "points_earned": 60
+          }
+        ]
+      }
+    },
+    {
+      "id": "3",
+      "username": "fitness_newbie",
+      "email": "newbie@example.com",
+      "password_hash": "pbkdf2:sha256:260000$ghi789$567890abcdef1234...",
+      "created_at": "2025-07-15T09:00:00Z",
+      "is_active": true,
+      "profile": {
+        "age": 22,
+        "weight": 68.0,
+        "height": 172,
+        "fitness_goal": "general_fitness",
+        "level": 1,
+        "xp": 150,
+        "points": 50,
+        "workouts_completed": 3,
+        "calories_burned": 450,
+        "daily_usage": 20,
+        "streak": 2,
+        "total_workouts": 3,
+        "time_active": 90,
+        "badges": ["first_workout"],
+        "achievements": [
+          {
+            "id": "first_workout",
+            "name": "First Workout",
+            "description": "Completed your first workout",
+            "earned_at": "2025-07-16T10:30:00Z"
+          }
+        ],
+        "workout_history": [
+          {
+            "date": "2025-07-19",
+            "type": "cardio",
+            "duration": 20,
+            "calories": 150,
+            "points_earned": 25
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,164 +1,1342 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-5">
-    <!-- Hero Section -->
-    <div class="row mb-5">
-        <div class="col-lg-8 mx-auto text-center">
-            <h1 class="display-4 fw-bold text-primary mb-4">
-                Welcome to FitPlay!
-            </h1>
-            <p class="lead mb-4">
-                The gamified fitness platform that makes staying healthy fun and rewarding. 
-                Track your progress, play fitness games, and earn points and badges!
-            </p>
-            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                <a href="{{ url_for('games.games') }}" class="btn btn-primary btn-lg me-md-2">
-                    <i class="fas fa-play me-2"></i>Start Playing
-                </a>
-                <a href="{{ url_for('dashboard.dashboard') }}" class="btn btn-outline-primary btn-lg">
-                    <i class="fas fa-chart-line me-2"></i>View Dashboard
-                </a>
-            </div>
-        </div>
-    </div>
+<style>
+:root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    --info-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    --danger-gradient: linear-gradient(135deg, #ff6b9d 0%, #ff8e86 100%);
+    
+    --neon-blue: #00d4ff;
+    --neon-pink: #ff6b9d;
+    --neon-green: #52ffa8;
+    --neon-yellow: #ffeb3b;
+    --neon-purple: #b794f6;
+    --neon-orange: #ff8c42;
+    
+    --glow-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+    --hover-glow: 0 0 30px rgba(255, 107, 157, 0.6);
+}
 
-    <!-- Stats Overview -->
-    <div class="row mb-5">
-        <div class="col-md-3 mb-3">
-            <div class="card text-center stats-card">
-                <div class="card-body">
-                    <i class="fas fa-star fa-2x text-warning mb-2"></i>
-                    <h3 class="card-title">{{ current_user.points }}</h3>
-                    <p class="card-text">Points Earned</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 mb-3">
-            <div class="card text-center stats-card">
-                <div class="card-body">
-                    <i class="fas fa-dumbbell fa-2x text-success mb-2"></i>
-                    <h3 class="card-title">{{ current_user.workouts_completed }}</h3>
-                    <p class="card-text">Workouts Done</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 mb-3">
-            <div class="card text-center stats-card">
-                <div class="card-body">
-                    <i class="fas fa-fire fa-2x text-danger mb-2"></i>
-                    <h3 class="card-title">{{ current_user.calories_burned }}</h3>
-                    <p class="card-text">Calories Burned</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 mb-3">
-            <div class="card text-center stats-card">
-                <div class="card-body">
-                    <i class="fas fa-medal fa-2x text-info mb-2"></i>
-                    <h3 class="card-title">{{ current_user.badges|length }}</h3>
-                    <p class="card-text">Badges Earned</p>
-                </div>
-            </div>
-        </div>
-    </div>
+body {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
+    min-height: 100vh;
+    position: relative;
+}
 
-    <!-- Feature Cards -->
-    <div class="row mb-5">
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 feature-card">
-                <div class="card-body text-center">
-                    <i class="fas fa-gamepad fa-3x text-primary mb-3"></i>
-                    <h5 class="card-title">Fitness Games</h5>
-                    <p class="card-text">
-                        Play interactive mini-games that make exercise fun. 
-                        Earn points for squats, jumps, planks, and more!
-                    </p>
-                    <a href="{{ url_for('games.games') }}" class="btn btn-primary">
-                        <i class="fas fa-play me-1"></i>Play Now
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 feature-card">
-                <div class="card-body text-center">
-                    <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
-                    <h5 class="card-title">Progress Tracking</h5>
-                    <p class="card-text">
-                        Monitor your fitness journey with detailed analytics. 
-                        Track calories, workout time, and achievements.
-                    </p>
-                    <a href="{{ url_for('dashboard.dashboard') }}" class="btn btn-success">
-                        <i class="fas fa-chart-bar me-1"></i>View Stats
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 feature-card">
-                <div class="card-body text-center">
-                    <i class="fas fa-utensils fa-3x text-info mb-3"></i>
-                    <h5 class="card-title">Diet Plans</h5>
-                    <p class="card-text">
-                        Get personalized nutrition recommendations based on 
-                        your age, weight, and fitness goals.
-                    </p>
-                    <a href="{{ url_for('diet.diet') }}" class="btn btn-info">
-                        <i class="fas fa-apple-alt me-1"></i>Get Plan
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+/* Enhanced Floating Shapes */
+.floating-shapes {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
 
-    <!-- Recent Badges -->
-    {% if current_user.badges %}
-    <div class="row mb-5">
-        <div class="col-12">
-            <h3 class="text-center mb-4">Your Badges</h3>
-            <div class="d-flex flex-wrap justify-content-center gap-3">
-                {% for badge in current_user.badges %}
-                <div class="badge-display">
-                    <div class="badge bg-warning text-dark p-3 rounded-circle">
-                        <i class="fas fa-trophy fa-2x"></i>
+.floating-shape {
+    position: absolute;
+    opacity: 0.15;
+    animation: floatAround 25s infinite ease-in-out;
+    font-size: 2rem;
+    text-shadow: 0 0 10px currentColor;
+}
+
+.floating-shape:nth-child(1) { 
+    color: var(--neon-blue); 
+    top: 10%; left: 5%; 
+    animation-delay: 0s;
+    animation-duration: 20s;
+}
+.floating-shape:nth-child(2) { 
+    color: var(--neon-pink); 
+    top: 20%; right: 10%; 
+    animation-delay: -5s;
+    animation-duration: 25s;
+}
+.floating-shape:nth-child(3) { 
+    color: var(--neon-yellow); 
+    bottom: 30%; left: 15%; 
+    animation-delay: -10s;
+    animation-duration: 30s;
+}
+.floating-shape:nth-child(4) { 
+    color: var(--neon-green); 
+    top: 60%; right: 20%; 
+    animation-delay: -15s;
+    animation-duration: 22s;
+}
+.floating-shape:nth-child(5) { 
+    color: var(--neon-purple); 
+    bottom: 10%; left: 25%; 
+    animation-delay: -20s;
+    animation-duration: 28s;
+}
+.floating-shape:nth-child(6) { 
+    color: var(--neon-orange); 
+    top: 40%; left: 40%; 
+    animation-delay: -8s;
+    animation-duration: 24s;
+}
+.floating-shape:nth-child(7) { 
+    color: var(--neon-blue); 
+    bottom: 50%; right: 5%; 
+    animation-delay: -12s;
+    animation-duration: 26s;
+}
+.floating-shape:nth-child(8) { 
+    color: var(--neon-pink); 
+    top: 80%; left: 60%; 
+    animation-delay: -18s;
+    animation-duration: 23s;
+}
+
+@keyframes floatAround {
+    0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    25% { transform: translate(100px, -50px) rotate(90deg) scale(1.2); }
+    50% { transform: translate(-80px, -100px) rotate(180deg) scale(0.8); }
+    75% { transform: translate(-120px, 50px) rotate(270deg) scale(1.1); }
+}
+
+/* Enhanced Hero Section */
+.hero-section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    background: var(--primary-gradient);
+    overflow: hidden;
+    z-index: 2;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+    animation: gridMove 20s linear infinite;
+    opacity: 0.3;
+}
+
+@keyframes gridMove {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(100px, 100px); }
+}
+
+.hero-title {
+    font-size: 4rem;
+    font-weight: 800;
+    background: linear-gradient(45deg, var(--neon-yellow), var(--neon-pink), var(--neon-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 30px rgba(255, 235, 59, 0.5);
+    animation: titleGlow 3s ease-in-out infinite alternate;
+    margin-bottom: 1.5rem;
+}
+
+@keyframes titleGlow {
+    0% { filter: brightness(1) drop-shadow(0 0 10px rgba(255, 235, 59, 0.3)); }
+    100% { filter: brightness(1.2) drop-shadow(0 0 20px rgba(255, 107, 157, 0.5)); }
+}
+
+.hero-subtitle {
+    font-size: 1.4rem;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: 2rem;
+    animation: fadeInUp 1s ease-out 0.3s both;
+}
+
+.hero-buttons {
+    animation: fadeInUp 1s ease-out 0.6s both;
+}
+
+/* Enhanced Game Buttons */
+.game-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--glow-shadow);
+    background: var(--secondary-gradient);
+    color: white;
+    z-index: 1;
+}
+
+.game-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s;
+}
+
+.game-button:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--hover-glow);
+    color: white;
+    text-decoration: none;
+}
+
+.game-button:hover::before {
+    left: 100%;
+}
+
+.game-button:active {
+    transform: translateY(-2px);
+}
+
+/* Enhanced Mascot */
+.mascot-container {
+    animation: fadeInRight 1s ease-out 0.4s both;
+}
+
+.mascot {
+    font-size: 8rem;
+    animation: mascotBounce 3s ease-in-out infinite;
+    position: relative;
+    display: inline-block;
+}
+
+@keyframes mascotBounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0) rotate(0deg); }
+    10% { transform: translateY(-20px) rotate(-5deg); }
+    30% { transform: translateY(-15px) rotate(5deg); }
+    60% { transform: translateY(-10px) rotate(-3deg); }
+}
+
+.mascot-sparkle {
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 30px;
+    height: 30px;
+    background: radial-gradient(circle, var(--neon-yellow) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(0); }
+    50% { opacity: 1; transform: scale(1); }
+}
+
+.mascot-speech {
+    background: var(--warning-gradient);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 25px;
+    margin-top: 20px;
+    font-weight: 600;
+    box-shadow: 0 10px 25px rgba(67, 233, 123, 0.3);
+    position: relative;
+    animation: speechBubble 4s ease-in-out infinite;
+}
+
+@keyframes speechBubble {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Enhanced Floating Elements */
+.floating-element {
+    position: absolute;
+    font-size: 3rem;
+    animation: float 6s ease-in-out infinite;
+    text-shadow: 0 0 15px currentColor;
+}
+
+.floating-star { 
+    color: var(--neon-yellow); 
+    animation-delay: 0s;
+}
+.floating-heart { 
+    color: var(--neon-pink); 
+    animation-delay: -2s;
+}
+.floating-trophy { 
+    color: var(--neon-orange); 
+    animation-delay: -4s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(10deg); }
+}
+
+/* Enhanced Stats Section */
+.stats-showcase {
+    background: var(--success-gradient);
+    padding: 80px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.game-title {
+    font-size: 3rem;
+    font-weight: 800;
+    background: linear-gradient(45deg, white, var(--neon-yellow));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-align: center;
+    margin-bottom: 3rem;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.stat-bubble {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    padding: 30px;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-bubble::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(transparent, rgba(255, 255, 255, 0.1), transparent);
+    animation: rotate 4s linear infinite;
+    z-index: -1;
+}
+
+@keyframes rotate {
+    100% { transform: rotate(360deg); }
+}
+
+.stat-bubble:hover {
+    transform: translateY(-15px) scale(1.05);
+    box-shadow: 0 20px 40px rgba(255, 255, 255, 0.2);
+}
+
+.stat-number {
+    font-size: 3rem;
+    font-weight: 800;
+    color: white;
+    text-shadow: 0 0 10px currentColor;
+}
+
+.stat-label {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+/* Enhanced Badge Section */
+.achievement-showcase {
+    background: var(--info-gradient);
+    padding: 80px 0;
+    position: relative;
+}
+
+.badge-item {
+    position: relative;
+    display: inline-block;
+    transition: all 0.4s ease;
+}
+
+.badge-icon {
+    font-size: 4rem;
+    animation: badgeFloat 3s ease-in-out infinite;
+    transition: all 0.3s ease;
+}
+
+@keyframes badgeFloat {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+.badge-item:hover .badge-icon {
+    transform: scale(1.3) rotate(15deg);
+    filter: brightness(1.2) drop-shadow(0 0 20px currentColor);
+}
+
+.badge-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(255, 235, 59, 0.3) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: pulse 3s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.6; }
+}
+
+.badge-name {
+    color: white;
+    font-weight: 600;
+    margin-top: 15px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Enhanced Daily Progress */
+.daily-progress {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+    padding: 30px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+}
+
+.progress {
+    height: 15px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.progress-bar {
+    background: var(--warning-gradient);
+    border-radius: 10px;
+    animation: progressGlow 2s ease-in-out infinite alternate;
+    transition: width 1s ease;
+}
+
+@keyframes progressGlow {
+    0% { box-shadow: 0 0 10px rgba(67, 233, 123, 0.5); }
+    100% { box-shadow: 0 0 20px rgba(56, 249, 215, 0.8); }
+}
+
+/* Enhanced Game Preview Cards */
+.game-preview-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+    padding: 30px;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.game-preview-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.6s;
+}
+
+.game-preview-card:hover::before {
+    left: 100%;
+}
+
+.game-preview-card:hover {
+    transform: translateY(-15px) scale(1.02);
+    box-shadow: 0 25px 50px rgba(102, 126, 234, 0.3);
+    border-color: rgba(255, 107, 157, 0.3);
+}
+
+.game-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    animation: gameIconFloat 4s ease-in-out infinite;
+    display: block;
+}
+
+.squat { color: var(--neon-pink); }
+.jump { color: var(--neon-green); }
+.plank { color: var(--neon-blue); }
+.burpee { color: var(--neon-orange); }
+
+@keyframes gameIconFloat {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    25% { transform: translateY(-5px) rotate(2deg); }
+    75% { transform: translateY(-3px) rotate(-2deg); }
+}
+
+.game-name {
+    color: white;
+    font-weight: 700;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.game-description {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+/* Enhanced Feature Section */
+.feature-showcase {
+    background: var(--danger-gradient);
+    padding: 80px 0;
+    position: relative;
+}
+
+.feature-item {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+    padding: 40px;
+    text-align: center;
+    height: 100%;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-item::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(transparent, rgba(255, 255, 255, 0.05), transparent);
+    animation: rotate 8s linear infinite;
+    z-index: -1;
+}
+
+.feature-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.feature-icon {
+    font-size: 4rem;
+    margin-bottom: 25px;
+    animation: featureIconPulse 3s ease-in-out infinite;
+    display: block;
+}
+
+@keyframes featureIconPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.feature-title {
+    color: white;
+    font-weight: 700;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.feature-description {
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.7;
+    margin-bottom: 25px;
+}
+
+/* Enhanced About Section */
+.about-section {
+    background: var(--primary-gradient);
+    padding: 80px 0;
+    color: white;
+}
+
+.about-description {
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
+
+.team-member {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+    padding: 30px;
+    text-align: center;
+    transition: all 0.4s ease;
+    height: 100%;
+}
+
+.team-member:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(255, 255, 255, 0.2);
+}
+
+.team-avatar {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    animation: teamAvatarWave 4s ease-in-out infinite;
+}
+
+@keyframes teamAvatarWave {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(5deg); }
+    75% { transform: rotate(-5deg); }
+}
+
+.team-name {
+    color: white;
+    font-weight: 700;
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+
+.team-role {
+    color: var(--neon-yellow);
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.team-bio {
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+}
+
+/* Enhanced Testimonials */
+.testimonials-section {
+    background: var(--success-gradient);
+    padding: 80px 0;
+    color: white;
+}
+
+.testimonial-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    padding: 30px;
+    text-align: center;
+    transition: all 0.4s ease;
+    height: 100%;
+    position: relative;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(255, 255, 255, 0.2);
+}
+
+.testimonial-avatar {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    animation: testimonialFloat 3s ease-in-out infinite;
+}
+
+@keyframes testimonialFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+}
+
+.testimonial-text {
+    font-style: italic;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.testimonial-author {
+    font-weight: 600;
+    color: var(--neon-yellow);
+}
+
+/* Enhanced CTA Section */
+.cta-section {
+    background: var(--primary-gradient);
+    padding: 80px 0;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-description {
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 3rem;
+    line-height: 1.7;
+}
+
+.game-button-large {
+    padding: 20px 40px;
+    font-size: 1.2rem;
+}
+
+.game-button-outline {
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+}
+
+.game-button-outline:hover {
+    background: white;
+    color: var(--primary-gradient);
+}
+
+.cta-floating-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+}
+
+.cta-star, .cta-trophy, .cta-heart, .cta-fire {
+    animation: ctaFloat 8s ease-in-out infinite;
+}
+
+.cta-trophy { animation-delay: -2s; }
+.cta-heart { animation-delay: -4s; }
+.cta-fire { animation-delay: -6s; }
+
+@keyframes ctaFloat {
+    0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.6; }
+    50% { transform: translateY(-30px) rotate(180deg); opacity: 1; }
+}
+
+/* Enhanced Footer */
+.game-footer {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: white;
+    padding: 50px 0 30px;
+}
+
+.footer-brand {
+    font-size: 2rem;
+    font-weight: 800;
+    background: var(--info-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 15px;
+}
+
+.social-links {
+    margin-top: 20px;
+}
+
+.social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background: var(--secondary-gradient);
+    color: white;
+    border-radius: 50%;
+    margin-right: 15px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.social-link:hover {
+    transform: translateY(-5px) scale(1.1);
+    box-shadow: 0 10px 20px rgba(255, 107, 157, 0.4);
+    color: white;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 10px;
+}
+
+.footer-links a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: var(--neon-yellow);
+    text-shadow: 0 0 10px currentColor;
+}
+
+/* Animation Utilities */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-title { font-size: 2.5rem; }
+    .game-title { font-size: 2rem; }
+    .mascot { font-size: 5rem; }
+    .floating-element { font-size: 2rem; }
+    .game-icon { font-size: 3rem; }
+    .feature-icon { font-size: 3rem; }
+    .stat-number { font-size: 2rem; }
+}
+</style>
+
+<!-- Floating Background Shapes -->
+<div class="floating-shapes">
+    <div class="floating-shape"><i class="fas fa-star fa-3x"></i></div>
+    <div class="floating-shape"><i class="fas fa-heart fa-3x"></i></div>
+    <div class="floating-shape"><i class="fas fa-trophy fa-3x"></i></div>
+    <div class="floating-shape"><i class="fas fa-dumbbell fa-3x"></i></div>
+    <div class="floating-shape"><i class="fas fa-medal fa-3x"></i></div>
+    <div class="floating-shape"><i class="fas fa-fire fa-3x"></i></div>
+    <div class="floating-shape"><i class="fas fa-bolt fa-3x"></i></div>
+    <div class="floating-shape"><i class="fas fa-gem fa-3x"></i></div>
+</div>
+
+<div class="container-fluid px-0">
+    <!-- Enhanced Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 text-center text-lg-start">
+                    <h1 class="hero-title">Welcome to FitPlay!</h1>
+                    <p class="hero-subtitle">
+                        🎮 The gamified fitness platform that makes staying healthy fun and rewarding! 
+                        Track your progress, play fitness games, and earn points and badges! ✨
+                    </p>
+                    <div class="hero-buttons">
+                        {% if current_user and current_user.is_authenticated %}
+                            <a href="{{ url_for('games.games') }}" class="game-button me-3">
+                                <i class="fas fa-play me-2"></i>Start Playing
+                            </a>
+                            <a href="{{ url_for('dashboard.dashboard') }}" class="game-button">
+                                <i class="fas fa-chart-line me-2"></i>View Dashboard
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('auth.signup') }}" class="game-button me-3">
+                                <i class="fas fa-user-plus me-2"></i>Join the Fun!
+                            </a>
+                            <a href="{{ url_for('auth.login') }}" class="game-button">
+                                <i class="fas fa-sign-in-alt me-2"></i>Login
+                            </a>
+                        {% endif %}
                     </div>
-                    <small class="d-block text-center mt-2">{{ badge.replace('_', ' ').title() }}</small>
                 </div>
-                {% endfor %}
+                <div class="col-lg-6 text-center">
+                    <div class="mascot-container">
+                        <div class="mascot">
+                            🏃‍♂️
+                            <div class="mascot-sparkle"></div>
+                        </div>
+                        <div class="mascot-speech">Let's get fit together!</div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    {% endif %}
+        
+        <!-- Floating Elements -->
+        <div class="floating-element floating-star" style="top: 20%; left: 10%;">⭐</div>
+        <div class="floating-element floating-heart" style="top: 30%; right: 15%;">💖</div>
+        <div class="floating-element floating-trophy" style="bottom: 25%; left: 20%;">🏆</div>
+    </section>
 
-    <!-- Daily Usage Limit -->
-    <div class="row">
-        <div class="col-lg-6 mx-auto">
-            <div class="card bg-light">
-                <div class="card-body text-center">
-                    <h5 class="card-title">
-                        <i class="fas fa-clock me-2"></i>Daily Usage
-                    </h5>
-                    <div class="progress mb-3">
-                        <div class="progress-bar" role="progressbar" 
-                             style="width: {{ (current_user.daily_usage / 120) * 100 }}%"
-                             aria-valuenow="{{ current_user.daily_usage }}" 
-                             aria-valuemin="0" 
-                             aria-valuemax="120">
+    {% if current_user and current_user.is_authenticated %}
+        <!-- Animated Stats Overview -->
+        <section class="stats-showcase">
+            <div class="container">
+                <h2 class="game-title text-center mb-5">Your Fitness Journey <span class="rocket">🚀</span></h2>
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <div class="stat-bubble">
+                            <div class="stat-number animated-stat">{{ current_user.profile.points }}</div>
+                            <div class="stat-label">Points Earned ⭐</div>
                         </div>
                     </div>
-                    <p class="card-text">
-                        {{ current_user.daily_usage }} / 120 minutes used today
-                    </p>
-                    {% if current_user.daily_usage >= 120 %}
-                    <div class="alert alert-warning">
-                        <i class="fas fa-exclamation-triangle me-2"></i>
-                        Daily limit reached! Take a break and come back tomorrow.
+                    <div class="col-md-3 mb-3">
+                        <div class="stat-bubble">
+                            <div class="stat-number animated-stat">{{ current_user.profile.workouts_completed }}</div>
+                            <div class="stat-label">Workouts Done 💪</div>
+                        </div>
                     </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="stat-bubble">
+                            <div class="stat-number animated-stat">{{ current_user.profile.calories_burned }}</div>
+                            <div class="stat-label">Calories Burned 🔥</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="stat-bubble">
+                            <div class="stat-number animated-stat">{{ current_user.profile.badges|length }}</div>
+                            <div class="stat-label">Badges Earned 🏅</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Badge Collection -->
+        {% if current_user.badges %}
+        <section class="achievement-showcase">
+            <div class="container">
+                <h2 class="game-title text-center mb-5">Your Awesome Badges! <span class="medal">🎖️</span></h2>
+                <div class="row justify-content-center">
+                    {% for badge in current_user.badges %}
+                    <div class="col-md-2 col-4 mb-4 text-center">
+                        <div class="badge-item">
+                            <div class="badge-icon">🏆</div>
+                            <div class="badge-glow"></div>
+                        </div>
+                        <div class="badge-name">{{ badge.replace('_', ' ').title() }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- Daily Usage Progress -->
+        <section class="container my-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="game-preview-card daily-progress">
+                        <h5 class="game-title">
+                            <i class="fas fa-clock me-2"></i>Daily Adventure Time ⏰
+                        </h5>
+                        <div class="progress-container">
+                            <div class="progress mb-3">
+                                <div class="progress-bar" role="progressbar" 
+                                     style="width: {{ (current_user.profile.daily_usage / 120) * 100 }}%">
+                                </div>
+                            </div>
+                            <div class="progress-text">
+                                {{ current_user.profile.daily_usage }} / 120 minutes of fun today!
+                            </div>
+                        </div>
+                        {% if current_user.profile.daily_usage >= 120 %}
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Great job! You've completed your daily adventure. Rest up for tomorrow! 😴
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+
+    <!-- Game Preview Section -->
+    <section class="container my-5">
+        <h2 class="game-title text-center mb-5">Choose Your Fitness Adventure! <span class="joystick">🎮</span></h2>
+        <div class="row">
+            <div class="col-md-3 mb-4">
+                <div class="game-preview-card" data-game="squat_tap">
+                    <div class="game-icon squat">🏋️‍♀️</div>
+                    <h5 class="game-name">Squat Tap</h5>
+                    <p class="game-description">Tap your way to stronger legs! Every squat counts!</p>
+                    {% if current_user and current_user.is_authenticated %}
+                        <a href="{{ url_for('games.squat_tap') }}" class="game-button">Play Now!</a>
+                    {% else %}
+                        <a href="{{ url_for('auth.signup') }}" class="game-button">Join to Play!</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="game-preview-card" data-game="jump_counter">
+                    <div class="game-icon jump">🦘</div>
+                    <h5 class="game-name">Jump Counter</h5>
+                    <p class="game-description">Bounce your way to fitness! How high can you score?</p>
+                    {% if current_user and current_user.is_authenticated %}
+                        <a href="{{ url_for('games.jump_counter') }}" class="game-button">Play Now!</a>
+                    {% else %}
+                        <a href="{{ url_for('auth.signup') }}" class="game-button">Join to Play!</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="game-preview-card" data-game="plank_timer">
+                    <div class="game-icon plank">⏱️</div>
+                    <h5 class="game-name">Plank Timer</h5>
+                    <p class="game-description">Hold strong! Test your core endurance!</p>
+                    {% if current_user and current_user.is_authenticated %}
+                        <a href="{{ url_for('games.plank_timer') }}" class="game-button">Play Now!</a>
+                    {% else %}
+                        <a href="{{ url_for('auth.signup') }}" class="game-button">Join to Play!</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="game-preview-card" data-game="burpee_challenge">
+                    <div class="game-icon burpee">💥</div>
+                    <h5 class="game-name">Burpee Blast</h5>
+                    <p class="game-description">Ultimate challenge! Full body workout game!</p>
+                    {% if current_user and current_user.is_authenticated %}
+                        <a href="{{ url_for('games.burpee_challenge') }}" class="game-button">Play Now!</a>
+                    {% else %}
+                        <a href="{{ url_for('auth.signup') }}" class="game-button">Join to Play!</a>
                     {% endif %}
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <!-- Feature Showcase -->
+    <section class="feature-showcase">
+        <div class="container">
+            <h2 class="game-title text-center mb-5">Why Kids & Adults Love FitPlay! <span class="sparkles">✨</span></h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="feature-item">
+                        <div class="feature-icon">🎮</div>
+                        <h5 class="feature-title">Fun Fitness Games</h5>
+                        <p class="feature-description">
+                            Turn exercise into play! Our interactive mini-games make working out feel like gaming. 
+                            Earn points, unlock achievements, and level up your fitness!
+                        </p>
+                        {% if current_user and current_user.is_authenticated %}
+                            <a href="{{ url_for('games.games') }}" class="game-button">Play Now</a>
+                        {% else %}
+                            <a href="{{ url_for('auth.signup') }}" class="game-button">Start Playing</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-item">
+                        <div class="feature-icon">📊</div>
+                        <h5 class="feature-title">Track Your Progress</h5>
+                        <p class="feature-description">
+                            Watch your fitness journey come to life! Beautiful charts and stats show your improvement. 
+                            See calories burned, workouts completed, and goals achieved!
+                        </p>
+                        {% if current_user and current_user.is_authenticated %}
+                            <a href="{{ url_for('dashboard.dashboard') }}" class="game-button">View Stats</a>
+                        {% else %}
+                            <a href="{{ url_for('auth.signup') }}" class="game-button">Start Tracking</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-item">
+                        <div class="feature-icon">🍎</div>
+                        <h5 class="feature-title">Smart Diet Plans</h5>
+                        <p class="feature-description">
+                            Get personalized nutrition that fits your age, goals, and preferences! 
+                            Healthy eating made simple and delicious!
+                        </p>
+                        {% if current_user and current_user.is_authenticated %}
+                            <a href="{{ url_for('diet.diet') }}" class="game-button">Get My Plan</a>
+                        {% else %}
+                            <a href="{{ url_for('auth.signup') }}" class="game-button">Get Started</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section class="about-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center mb-5">
+                    <h2 class="game-title">Meet the FitPlay Team! <span class="team-icon">👨‍💻👩‍💻</span></h2>
+                    <p class="about-description">
+                        We're passionate about making fitness fun for everyone! Our mission is to turn exercise 
+                        into an exciting adventure that kids and adults can't wait to start!
+                    </p>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-4 mb-4">
+                    <div class="team-member">
+                        <div class="team-avatar">👨‍💻</div>
+                        <h5 class="team-name">Alex Johnson</h5>
+                        <p class="team-role">Lead Developer & Fitness Enthusiast</p>
+                        <p class="team-bio">Making code and cardio work together since 2020!</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="team-member">
+                        <div class="team-avatar">👩‍🎨</div>
+                        <h5 class="team-name">Sarah Chen</h5>
+                        <p class="team-role">UI/UX Designer & Wellness Coach</p>
+                        <p class="team-bio">Creating beautiful experiences that motivate movement!</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="team-member">
+                        <div class="team-avatar">👨‍⚕️</div>
+                        <h5 class="team-name">Dr. Mike Rodriguez</h5>
+                        <p class="team-role">Sports Medicine & Nutrition Expert</p>
+                        <p class="team-bio">Ensuring every workout is safe, fun, and effective!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section">
+        <div class="container">
+            <h2 class="game-title text-center mb-5">What Our Players Say! <span class="speech-bubble">💬</span></h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="testimonial-card">
+                        <div class="testimonial-avatar">👧</div>
+                        <div class="testimonial-text">
+                            "I love earning badges! It makes me want to exercise every day. My favorite game is Jump Counter!" 
+                        </div>
+                        <div class="testimonial-author">- Emma, Age 12</div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="testimonial-card">
+                        <div class="testimonial-avatar">👨</div>
+                        <div class="testimonial-text">
+                            "Finally found a way to get my kids active! They ask to do 'homework' (FitPlay) before actual homework!" 
+                        </div>
+                        <div class="testimonial-author">- Parent of 3</div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="testimonial-card">
+                        <div class="testimonial-avatar">👩</div>
+                        <div class="testimonial-text">
+                            "As a teacher, I use FitPlay during PE class. The kids are more engaged than ever before!" 
+                        </div>
+                        <div class="testimonial-author">- Ms. Rodriguez, PE Teacher</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h2 class="game-title mb-4">Ready to Start Your Adventure? <span class="target">🎯</span></h2>
+                    <p class="cta-description">
+                        Join thousands of kids and families who are making fitness fun! 
+                        Your journey to a healthier, happier you starts with just one click!
+                    </p>
+                    <div class="cta-buttons">
+                        {% if not current_user or not current_user.is_authenticated %}
+                            <a href="{{ url_for('auth.signup') }}" class="game-button game-button-large me-3">
+                                <i class="fas fa-rocket me-2"></i>Start My Adventure FREE!
+                            </a>
+                            <a href="{{ url_for('auth.login') }}" class="game-button game-button-outline">
+                                <i class="fas fa-sign-in-alt me-2"></i>I Already Have an Account
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('games.games') }}" class="game-button game-button-large me-3">
+                                <i class="fas fa-play me-2"></i>Continue My Adventure!
+                            </a>
+                            <a href="{{ url_for('dashboard.dashboard') }}" class="game-button game-button-outline">
+                                <i class="fas fa-chart-line me-2"></i>Check My Progress
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Animated Background Elements -->
+        <div class="cta-floating-elements">
+            <div class="floating-element cta-star" style="top: 10%; left: 5%;">⭐</div>
+            <div class="floating-element cta-trophy" style="top: 20%; right: 10%;">🏆</div>
+            <div class="floating-element cta-heart" style="bottom: 30%; left: 15%;">💖</div>
+            <div class="floating-element cta-fire" style="bottom: 15%; right: 5%;">🔥</div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="game-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <h5 class="footer-brand">FitPlay 🎮</h5>
+                    <p class="footer-description">
+                        Making fitness fun for everyone! Join our community and turn your workout 
+                        into an epic adventure filled with games, rewards, and achievements!
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h6 class="footer-heading">Quick Links</h6>
+                    <ul class="footer-links">
+                        <li><a href="{{ url_for('main.index') }}">🏠 Home</a></li>
+                        {% if current_user and current_user.is_authenticated %}
+                            <li><a href="{{ url_for('games.games') }}">🎮 Games</a></li>
+                            <li><a href="{{ url_for('dashboard.dashboard') }}">📊 Dashboard</a></li>
+                            <li><a href="{{ url_for('diet.diet') }}">🍎 Diet Plans</a></li>
+                        {% else %}
+                            <li><a href="{{ url_for('auth.signup') }}">🚀 Sign Up</a></li>
+                            <li><a href="{{ url_for('auth.login') }}">🔐 Login</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h6 class="footer-heading">Support</h6>
+                    <ul class="footer-links">
+                        <li><a href="#">❓ Help Center</a></li>
+                        <li><a href="#">📞 Contact Us</a></li>
+                        <li><a href="#">🔒 Privacy Policy</a></li>
+                        <li><a href="#">📋 Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="footer-divider">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="footer-copyright">
+                        © 2025 FitPlay. Made with 💖 for healthy, happy families! 
+                        <span class="mascot-mini">🏃‍♂️</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Animate stats when they come into view
+    const animateStats = () => {
+        const stats = document.querySelectorAll('.animated-stat');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = entry.target;
+                    const finalValue = parseInt(target.textContent);
+                    let currentValue = 0;
+                    const increment = finalValue / 30;
+                    
+                    const updateCounter = () => {
+                        currentValue += increment;
+                        if (currentValue < finalValue) {
+                            target.textContent = Math.floor(currentValue);
+                            requestAnimationFrame(updateCounter);
+                        } else {
+                            target.textContent = finalValue;
+                        }
+                    };
+                    
+                    updateCounter();
+                    observer.unobserve(target);
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        stats.forEach(stat => observer.observe(stat));
+    };
+    
+    // Add hover effects to game cards
+    const gameCards = document.querySelectorAll('.game-preview-card');
+    gameCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-10px)';
+            this.style.boxShadow = '0 15px 30px rgba(108, 92, 231, 0.2)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+            this.style.boxShadow = '';
+        });
+        
+        card.addEventListener('click', function() {
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'translateY(-10px)';
+            }, 150);
+        });
+    });
+    
+    // Add hover effects to buttons
+    const buttons = document.querySelectorAll('.game-button');
+    buttons.forEach(button => {
+        button.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px)';
+            this.style.boxShadow = '0 8px 20px rgba(108, 92, 231, 0.3)';
+        });
+        
+        button.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+            this.style.boxShadow = '';
+        });
+    });
+    
+    // Initialize animations
+    animateStats();
+    
+    // Add random floating animation to badges
+    const badges = document.querySelectorAll('.badge-icon');
+    badges.forEach((badge, index) => {
+        setTimeout(() => {
+            badge.style.animation = `float 3s ease-in-out infinite ${index * 0.2}s`;
+        }, index * 200);
+    });
+});
+</script>
+
 {% endblock %}
